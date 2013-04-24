@@ -28,6 +28,12 @@ public class Player extends Entity
         this.SetY(newY);
     }
     
+
+    public void pickUp()
+    {
+        
+    }
+    
     public char GetDirection()
     {
         return this.direction;

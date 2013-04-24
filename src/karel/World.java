@@ -265,7 +265,6 @@ public class World extends JPanel
         else if (karel.isGemCollision(newX, newY, gems) != -1)
         {
             //pick up the gem and move karel
-            gems.remove(karel.isGemCollision(newX, newY, gems));
             karel.move(x, y);
         }
         else
