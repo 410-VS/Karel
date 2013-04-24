@@ -37,10 +37,15 @@ public class Player extends Entity
         this.gemBag++;
     }
     
+    public void removeGem()
+    {
+        this.gemBag--;
+    }
     public int getGemCount()
     {
         return this.gemBag;
     }
+    
     
     public char GetDirection()
     {
