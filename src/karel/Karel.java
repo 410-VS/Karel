@@ -338,7 +338,7 @@ public class Karel extends javax.swing.JFrame
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton8ActionPerformed
     {//GEN-HEADEREND:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+        world.choiceMade("get");
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton9ActionPerformed

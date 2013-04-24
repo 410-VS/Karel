@@ -233,6 +233,15 @@ public class World extends JPanel
                     break;
             }
         }
+        else if ("get".equals(choice))//turn the player right
+        {
+            //if the gem is on the same space as karel
+            if (karel.isGemCollision(karel.GetX(), karel.GetY(), gems) != -1)
+            {
+                //pick up the gem
+                gems.remove(karel.isGemCollision(karel.GetX(), karel.GetY(), gems));
+            }
+        }
         
        else if ("manual".equals(choice)) //Get multiple commands
        {
