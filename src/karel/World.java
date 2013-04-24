@@ -274,8 +274,4 @@ public class World extends JPanel
             karel.move(x, y);
         }
     }
-    
 }
-    
-
-    
