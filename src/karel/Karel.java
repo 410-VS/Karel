@@ -23,15 +23,9 @@ public class Karel extends javax.swing.JFrame
         
     }
     
-    public void InitUI() {
-        //Board board = new Board();
-        //add(board);
-
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //setSize(board.getBoardWidth() + OFFSET,
-        //        board.getBoardHeight() + 2*OFFSET);
-        //setLocationRelativeTo(null);
-        //setTitle("Sokoban");
+    public void InitUI() 
+    {
+        
     }
 
 
