@@ -2,11 +2,14 @@ package karel;
 
 import java.awt.Image;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 public class Player extends Entity
 {
     char direction; //karels icon ^ > < v
+    
+    private int gemBag; //how many gems karel is holding
     
     public Player(int x, int y) 
     {
@@ -28,10 +31,15 @@ public class Player extends Entity
         this.SetY(newY);
     }
     
-
-    public void pickUp()
+    
+    public void addGem()
     {
-        
+        this.gemBag++;
+    }
+    
+    public int getGemCount()
+    {
+        return this.gemBag;
     }
     
     public char GetDirection()
