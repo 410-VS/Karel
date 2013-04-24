@@ -240,13 +240,23 @@ public class World extends JPanel
             {
                 //pick up the gem
                 gems.remove(karel.isGemCollision(karel.GetX(), karel.GetY(), gems));
+                karel.addGem();
             }
         }
-        
-       else if ("manual".equals(choice)) //Get multiple commands
-       {
-            //actions();
-       }
+        else if ("put".equals(choice))//turn the player right
+        {
+            //pick up the gem
+            if(karel.getGemCount() > 0)
+            {
+                karel.removeGem();
+                Gem gem = new Gem(karel.GetX(),karel.GetY());
+                gems.add(gem);
+            }
+        }
+        else if ("manual".equals(choice)) //Get multiple commands
+        {
+             //actions();
+        }
 
         this.repaint();
     }
