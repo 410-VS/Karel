@@ -262,11 +262,6 @@ public class World extends JPanel
                 System.out.println("You have won!");
             }
         }
-        else if (karel.isGemCollision(newX, newY, gems) != -1)
-        {
-            //pick up the gem and move karel
-            karel.move(x, y);
-        }
         else
         {
             //move karel
