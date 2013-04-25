@@ -18,6 +18,7 @@ public class World extends JPanel
     private ArrayList gems = new ArrayList(); //gems in world
     private ArrayList areas = new ArrayList(); //floors
     private boolean isRunning = true; //game ending bool
+    private boolean skipPaint = false;
     Wall home = new Wall(0,0); // home space
     protected Player karel; //object for karel 
     private int w = 18;
@@ -248,11 +249,19 @@ public class World extends JPanel
                     gems.add(gem);
                 }
                 break;
+            case "noPaint":
+                skipPaint = true;
+            
             case "manual":
                 break;
         }
-
-        this.repaint();
+        
+        //update the map unless marked as skipped
+        if (!skipPaint)
+        {
+            this.repaint();
+            skipPaint = false;
+        }
     }
      
     public void handleMove(int x, int y)
