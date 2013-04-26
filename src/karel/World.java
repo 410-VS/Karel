@@ -1,9 +1,19 @@
 package karel;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import javax.swing.JPanel;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.*;
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Element;
+
 /**
  * Karel the Robot
  * Current version has 1 predefined map
@@ -22,6 +32,8 @@ public class World extends JPanel
     protected Player karel; //object for karel 
     private int w = 18;
     private int h = 14;
+    JTextArea lines;
+    JTextArea jta;
     
     //Map
     private String level =
@@ -251,7 +263,6 @@ public class World extends JPanel
             case "manual":
                 break;
         }
-
         this.repaint();
     }
      
@@ -281,4 +292,387 @@ public class World extends JPanel
             karel.move(x, y);
         }
     }
+    public  void actions() 
+        {
+            // Creating the popout frame with line numbering
+            JFrame textframe = new JFrame("Programmer Mode");
+            // Building Menu
+            JMenuBar bar1;
+            JMenu menu1;
+            JMenuItem menuItem;
+            bar1 = new JMenuBar();
+            menu1 = new JMenu("File");
+            menu1.setMnemonic(KeyEvent.VK_A);
+            bar1.add(menu1);
+            menuItem = new JMenuItem("Run",
+                                KeyEvent.VK_T);
+            menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                                    KeyEvent.VK_1, ActionEvent.ALT_MASK));
+            menu1.add(menuItem);
+            // Creating the JTextArea's
+            textframe.setJMenuBar(bar1);
+            textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JScrollPane textpane = new JScrollPane();
+            jta = new JTextArea();
+	    lines = new JTextArea("1");
+            // Listening for input and adding lines
+            jta.getDocument().addDocumentListener(new DocumentListener()
+                {
+			public String getText()
+                        {
+				int caretPosition = jta.getDocument().getLength();
+				Element root = jta.getDocument().getDefaultRootElement();
+				String text = "1" + System.getProperty("line.separator");
+				for(int i = 2; i < root.getElementIndex( caretPosition ) + 2; i++)
+                                {
+					text += i + System.getProperty("line.separator");
+				}
+				return text;
+			}
+			@Override
+			public void changedUpdate(DocumentEvent de) {
+				lines.setText(getText());
+			}
+ 
+			@Override
+			public void insertUpdate(DocumentEvent de) {
+				lines.setText(getText());
+			}
+ 
+			@Override
+			public void removeUpdate(DocumentEvent de) {
+				lines.setText(getText());
+			}
+ 
+		});
+ 
+            textpane.getViewport().add(jta);
+            textpane.setRowHeaderView(lines);
+            textpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+ 
+            textframe.add(textpane);
+            textframe.pack();
+            textframe.setSize(500,500);
+            textframe.setVisible(true);
+            lines.setBackground(Color.LIGHT_GRAY);
+	    lines.setEditable(false);
+            menuItem.addActionListener(new ActionListener() 
+                {
+                   @Override
+                   public void actionPerformed(java.awt.event.ActionEvent e)
+                   {
+                       List<String> user_input = Arrays.asList(jta.getText().split("\n"));
+                       int line_count = doScript(0, 0, user_input); // Running
+                       if (line_count == user_input.size())
+                       {
+                           infoBox("Successful run!", "Yay");
+                       }
+                   }
+                                           
+                                           
+                                           
+                                           
+                });
+            
+        }    
+            
+            
+        public int doScript(int line_count, int scope, List<String> user_input)
+        { // Runs a user defined list of commands. Used recursively.
+          // line_count is how far into the file we are
+          // scope is the level of nested commands
+          // user_input is the string array containing the file
+            
+            int max_line_count = user_input.size(); // Size of the file
+            
+            while (line_count < max_line_count) 
+            { 
+                String current_line = user_input.get(line_count); // Gets the line we're
+                                                                 // dealing with
+                String tempstr = new String(); // Used for swapping strings
+                String conditional = new String(); // Holds the condition
+                                                   // to be checked.
+                int repeat_num = 0; //The number of times to repeat. Initialized
+                                    //to a valid value for error checking
+                int next_line = 0; //Keeps the next line when dealing with scope
+                final int throw_error = max_line_count + 1; // Error return value
+                
+                if (current_line.isEmpty())
+                {
+                    line_count++;
+                    continue;
+                }
+                
+                // Checking for valid scope
+                if (scope > 0) 
+                {
+                    int i;
+                    for (i = 0; i < scope; i++)
+                    {
+                        if (!(current_line.startsWith("\t")))
+                        {
+                            return line_count; // Returning due to out of scope
+                        }
+                        
+                        else
+                        {
+                            current_line = current_line.substring(1); // Removing the tab
+                        }
+                    }
+                    if (current_line.startsWith("\t"))
+                    {
+                        infoBox("Undefined scope on line " + (line_count + 1), "ERROR");
+                        return throw_error;
+                    }
+                }
+                current_line = current_line.trim();
+                
+                /* Parsing the current line for recognizable Syntax */
+                if (current_line.matches("^repeat [0-9]{1,}$"))
+                {
+                    tempstr = current_line.substring(7); // Grabbing the number
+                    repeat_num = Integer.valueOf(tempstr);
+                    tempstr = current_line.substring(0, 6); // Grabbing the repeat
+                    current_line = tempstr;
+                }
+                
+                if(current_line.matches("^if (not )?(gem|home|wall)$"))
+                {
+                    conditional = current_line.substring(3); // Grabbing condition
+                    tempstr = current_line.substring(0, 2); // Grabbing if
+                    current_line = tempstr;
+                }
+                
+                if (current_line.matches("^while (not )?(gem|home|wall)$"))
+                {
+                    conditional = current_line.substring(6); // Grabbing condition
+                    tempstr = current_line.substring(0, 5); // Grabbing while
+                    current_line = tempstr;
+                }
+                /* End Parsing */                
+                switch (current_line)
+                { // Controls the logic for each valid command
+                  // If input is something unexpected, it halts execution and
+                  // prints an appropriate error
+                  // Any time an error is encountered, max_line_count + 1 is
+                  // returned, signaling to end execution
+                  // Note: Since line_count is post-incremented, all uses of
+                  // next_line are reduced by 1 to account for the post increment
+                    case "left" :                       
+                    case "right":                        
+                    case "go"   : 
+                    case "put"  :
+                    case "get"  :
+                            choiceMade(current_line);
+                            break;
+                    case "repeat":  
+                            // Checking if the repeat integer is out of range 
+                            if ((repeat_num < 1) || (repeat_num > 999))
+                            { 
+                                infoBox("Repeat value not "
+                                        + "in valid range (1-999) "
+                                        + "on line " + (line_count + 1), "ERROR");
+                                return throw_error;
+                            }
+                        
+                            for (int i = 0; i < repeat_num; i++)
+                            {
+                                next_line = doScript((line_count + 1), 
+                                                    (scope + 1), user_input);
+                                
+                                // If an error was returned
+                                if (next_line > max_line_count)
+                                { 
+                                    return throw_error;
+                                }
+                                
+                            }
+                            line_count = next_line - 1;
+                            break; 
+                            // End "Repeat" case
+                        
+                    case "if"   :
+                            // Checking if the conditional is blank
+                            if(conditional.isEmpty())
+                            { 
+                                infoBox("Expected condition"
+                                        + " after If on line " 
+                                        +  (line_count + 1), "ERROR");;
+                                return throw_error;
+                            }                           
+                            
+                            if (handleCondition(conditional))
+                            { // Successful If case
+                                next_line = doScript((line_count + 1), 
+                                                    (scope + 1), user_input);
+                            }
+                            
+                            else
+                            { // Successful Else case
+                                // Finding the accompanying Else statement
+                                tempstr = "else";
+                                
+                                // Forming tempstr based on our scope
+                                for (int i = 0; i < scope; i++)
+                                {
+                                    tempstr = "\t" + tempstr;
+                                }
+                                int else_line = line_count + 1;//Line the Else is on
+                                
+                                // While the next line isn't our Else
+                                while (! (user_input.get(else_line).matches(tempstr)))
+                                {
+                                    else_line++;
+                                    
+                                    // If we can't find an accompanying Else
+                                    if (else_line >= max_line_count)
+                                    {
+                                        return line_count;
+                                    }
+                                }
+                                // End check for accompanying Else
+                               
+                                next_line = doScript((else_line + 1), 
+                                                    (scope + 1), user_input);
+                             }
+                            
+                            line_count = next_line - 1;
+                            break;
+                    
+                    case "else" : // Only falls in this after a successful 'If'   
+                                  // This code is used to skip the unnecessary
+                                  // Else and all statements within it
+                            tempstr = "\t";
+                            
+                            // As long as the line exceeds our scope
+                            do
+                            {
+                                ++line_count;
+                                
+                                // If we've reached the end of the file
+                                if (line_count >= max_line_count)
+                                { 
+                                    return line_count;
+                                }
+                             } while (user_input.get(line_count).startsWith(tempstr, scope));
+                             line_count -= 1;
+                            break;
+                            // End "If-Else" case
+                        
+                    case "while" :
+                            // Checking if the conditional is blank
+                            if(conditional.isEmpty())
+                            { 
+                                infoBox("Expected condition"
+                                        + " on line " 
+                                        +  (line_count + 1), "ERROR");
+                                return throw_error;
+                            }
+                            int while_line = line_count;
+                            while (handleCondition(conditional))
+                            {
+                                next_line = doScript((while_line + 1), 
+                                                     (scope + 1), user_input);                                                               
+                                // If an error was returned in this loop
+                                if (next_line > max_line_count)
+                                {
+                                    return throw_error;
+                                }
+                                line_count = next_line - 1;
+                            }
+                            break;
+                             // End "While" case
+                        
+                    default: 
+                            infoBox("Unrecognized syntax\n" 
+                                    + current_line 
+                                    + "\nOn line " + (line_count + 1), "ERROR");
+                            return throw_error;
+                }
+                ++line_count;
+            }
+            return line_count;
+        }
+        
+        // Function to check if a conditional is true or false
+        public boolean handleCondition(String conditional)
+        {
+            char direction = karel.GetDirection();
+            int x = 0;
+            int y = 0;
+            
+            // Getting the correct x and y values to use
+            switch(direction)
+            {
+                    case '^':
+                        x = 0;
+                        y = -SPACE;
+                        break;
+                    case 'v':
+                        x = 0;
+                        y = SPACE;
+                        break;
+                    case '>':
+                        x = SPACE;
+                        y = 0;
+                        break;
+                    case '<':
+                        x = -SPACE;
+                        y = 0;
+                        break;
+            }
+            
+            int newX = x + karel.GetX(); // Getting x of next space
+            int newY = y + karel.GetY(); // Getting y of next space
+            x = karel.GetX(); // Current space x
+            y = karel.GetY(); // Current space Y
+            
+            switch (conditional)
+            {
+                case "not gem" :
+                        if ( (karel.isGemCollision(x, y, gems)) == -1)
+                        { return true; }
+                        
+                        else
+                        { return false; }
+                        
+                case "gem"  :
+                        if ( (karel.isGemCollision(x, y, gems)) != -1)
+                        { return true; }
+                       
+                        else
+                        { return false; }
+                        
+                case "not wall":
+                        if (!karel.isWallCollision(newX, newY, walls))
+                        { return true; }
+                        
+                        else
+                        { return false; }
+                case "wall" :
+                        if (karel.isWallCollision(newX, newY, walls))
+                        { return true; }
+                        
+                        else
+                        { return false; }
+                case "not home":
+                        if (!karel.isHomeCollision(x, y, home))
+                        { return true; }
+                        
+                        else
+                        { return false; }
+                case "home" :
+                        if (karel.isHomeCollision(x, y, home))
+                        { return true; }
+                        
+                        else
+                        { return false; }
+            }
+           
+            return false; // Should never get here
+        }
+        public static void infoBox(String infoMessage, String location)
+        {
+            JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + location, JOptionPane.INFORMATION_MESSAGE);
+        }
 }
