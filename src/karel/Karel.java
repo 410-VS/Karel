@@ -17,8 +17,8 @@ public class Karel extends javax.swing.JFrame
     {
         this.setTitle("Karel");
         initComponents();
-        manualPanel.setVisible(true);
-        buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
+        buttonPanel.setVisible(true);
         InitUI();
         
     }
@@ -348,8 +348,9 @@ public class Karel extends javax.swing.JFrame
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton10ActionPerformed
     {//GEN-HEADEREND:event_jButton10ActionPerformed
-        manualPanel.setVisible(true);
+
         buttonPanel.setVisible(false);
+        world.actions();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     /**
