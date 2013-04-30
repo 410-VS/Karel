@@ -10,6 +10,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
@@ -299,7 +306,7 @@ public class World extends JPanel
             // Building Menu
             JMenuBar bar1;
             JMenu menu1;
-            JMenuItem menuItem;
+            JMenuItem menuItem, menuSave;
             bar1 = new JMenuBar();
             menu1 = new JMenu("File");
             menu1.setMnemonic(KeyEvent.VK_A);
@@ -309,6 +316,10 @@ public class World extends JPanel
             menuItem.setAccelerator(KeyStroke.getKeyStroke(
                                     KeyEvent.VK_1, ActionEvent.ALT_MASK));
             menu1.add(menuItem);
+           
+            menuSave = new JMenuItem("Save Code");
+            menu1.add(menuSave);
+            
             // Creating the JTextArea's
             textframe.setJMenuBar(bar1);
             textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -373,6 +384,39 @@ public class World extends JPanel
                                            
                                            
                 });
+            menuSave.addActionListener(new ActionListener() 
+                {
+                   @Override
+                   public void actionPerformed(java.awt.event.ActionEvent e)
+                   {
+                       try 
+                       {
+                            List<String> user_input = Arrays.asList(jta.getText().split("\n"));
+                            PrintWriter out;
+                            DateFormat dateFormat = new SimpleDateFormat("MM/dd@HH:mm:ss");
+                            Date date = new Date();
+        
+                            String fileName1, fileName2;
+                            //fileName1 is desirable, but crashes due to file not found exception?
+                            fileName1 = "KarelCode-";
+                            fileName1 += dateFormat.format(date);
+                            fileName1 += ".txt";
+                           
+                            fileName2 = "KarelProgrammerMode.txt";
+                            
+                            out = new PrintWriter(fileName2);
+                            
+                            for(int loop = 0; loop < user_input.size(); loop++)
+                            {
+                               out.println(user_input.get(loop));                                
+                            }
+
+                            out.close();
+                       } catch (FileNotFoundException ex) {
+                           Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }                       
+                });            
             
         }    
             
