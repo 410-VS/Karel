@@ -75,7 +75,16 @@ public class World extends JPanel
     {
         return this.h;
     }
+    
+    public int getPlayerGem()
+    {
+        return karel.getGemCount();
+    }
 
+    public int getStepCount()
+    {
+        return karel.getSteps();
+    }
     
     //Reads the map and adds all objects and their coordinates to arraylists
     public final void initWorld()

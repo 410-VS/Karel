@@ -43,6 +43,10 @@ public class Karel extends javax.swing.JFrame
         topSubContainer = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        StepCount = new javax.swing.JLabel();
+        GemCount = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         bottomSubContainer = new javax.swing.JPanel();
         middleContainer = new javax.swing.JPanel();
         leftContainer = new javax.swing.JPanel();
@@ -93,6 +97,14 @@ public class Karel extends javax.swing.JFrame
             }
         });
 
+        StepCount.setText("0");
+
+        GemCount.setText("0");
+
+        jLabel2.setText("Moves:");
+
+        jLabel3.setText("Gems:");
+
         javax.swing.GroupLayout topSubContainerLayout = new javax.swing.GroupLayout(topSubContainer);
         topSubContainer.setLayout(topSubContainerLayout);
         topSubContainerLayout.setHorizontalGroup(
@@ -102,14 +114,26 @@ public class Karel extends javax.swing.JFrame
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
-                .addGap(0, 815, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(StepCount)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(GemCount)
+                .addGap(70, 70, 70))
         );
         topSubContainerLayout.setVerticalGroup(
             topSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topSubContainerLayout.createSequentialGroup()
                 .addGroup(topSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
-                    .addComponent(jButton10))
+                    .addComponent(jButton10)
+                    .addComponent(StepCount)
+                    .addComponent(GemCount)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
                 .addGap(0, 3, Short.MAX_VALUE))
         );
 
@@ -326,6 +350,7 @@ public class Karel extends javax.swing.JFrame
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton4ActionPerformed
     {//GEN-HEADEREND:event_jButton4ActionPerformed
         world.choiceMade("go");
+        StepCount.setText("" + world.getStepCount());
         buttonPanel.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -344,11 +369,13 @@ public class Karel extends javax.swing.JFrame
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton8ActionPerformed
     {//GEN-HEADEREND:event_jButton8ActionPerformed
         world.choiceMade("get");
+        GemCount.setText("" + world.getPlayerGem());
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton9ActionPerformed
     {//GEN-HEADEREND:event_jButton9ActionPerformed
         world.choiceMade("put");
+        GemCount.setText("" + world.getPlayerGem());
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton10ActionPerformed
@@ -414,7 +441,9 @@ public class Karel extends javax.swing.JFrame
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel GemCount;
     private javax.swing.JMenu SaveCodeChoice;
+    private javax.swing.JLabel StepCount;
     private javax.swing.JPanel bottomSubContainer;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton jButton10;
@@ -425,6 +454,8 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
