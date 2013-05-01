@@ -169,7 +169,7 @@ public class World extends JPanel
             {
                 g.drawImage(item.getImage(), item.GetX(), item.GetY(), this);
             }
-
+            
     /*        if (completed) {
                 g.setColor(new Color(0, 0, 0));
                 g.drawString("Completed", 25, 20);
