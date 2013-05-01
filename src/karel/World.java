@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -331,7 +332,7 @@ public class World extends JPanel
             
             // Creating the JTextArea's
             textframe.setJMenuBar(bar1);
-            textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             JScrollPane textpane = new JScrollPane();
             jta = new JTextArea();
 	    lines = new JTextArea("1");
@@ -398,22 +399,30 @@ public class World extends JPanel
                    @Override
                    public void actionPerformed(java.awt.event.ActionEvent e)
                    {
-                       try 
-                       {
-                            List<String> user_input = Arrays.asList(jta.getText().split("\n"));
-                            PrintWriter out;
-                            DateFormat dateFormat = new SimpleDateFormat("MM/dd@HH:mm:ss");
-                            Date date = new Date();
-        
-                            String fileName1, fileName2;
-                            //fileName1 is desirable, but crashes due to file not found exception?
-                            fileName1 = "KarelCode-";
-                            fileName1 += dateFormat.format(date);
-                            fileName1 += ".txt";
-                           
-                            fileName2 = "KarelProgrammerMode.txt";
-                            
-                            out = new PrintWriter(fileName2);
+         		JFileChooser fileChooser = new JFileChooser();
+                	fileChooser.setDialogTitle("Specify a file to save");
+                        List<String> user_input = Arrays.asList(jta.getText().split("\n"));
+                        PrintWriter out = null;                      
+
+                        int userSelection = fileChooser.showSaveDialog(fileChooser);
+                        if (userSelection == JFileChooser.APPROVE_OPTION) 
+                        {
+                             try 
+                             {
+                                 File fileToSave = fileChooser.getSelectedFile();
+                                 DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
+                                 Date date = new Date();
+             
+                                 String fileName1;
+                                 fileName1 = "KarelCode_";
+                                 fileName1 += dateFormat.format(date);
+                                 fileName1 += ".txt";
+                                                           
+                                 out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
+                             } catch (FileNotFoundException ex) {
+                                 Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+                             }
+                        }
                             
                             for(int loop = 0; loop < user_input.size(); loop++)
                             {
@@ -421,9 +430,7 @@ public class World extends JPanel
                             }
 
                             out.close();
-                       } catch (FileNotFoundException ex) {
-                           Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
-                       }
+
                    }                       
                 });            
             
