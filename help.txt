@@ -1,0 +1,170 @@
+Welcome to Karel!
+
+
+This file will help you navigate our Karel software as currently packaged.
+
+For the source code and other documentation, please visit https://github.com/410-VS/Karel
+
+I. Intro
+
+A. What is Karel?
+
+Karel is a game, setup as an interface between the user and a robot. The robot, Karel, lives in a map filled with gems. The user's job is to get Karel safely around the map without hitting any walls while picking up gems and eventually returning  home. As the user progresses through difficulty levels, they are presented with new ways to control Karel. The first is simple buttons: turn left/right, pick up a gem, go, etc. The second has the user typing these commands, one command per line. The third allows the user an even more complex method of control, such instructing the robot to repeat a series of commands or even find out things about the world around him on his own.
+
+B. Why are you using Karel?
+
+As the user progresses through difficulty levels, they begin to encounter basic methods of programming. For example, a program could be written that carefully steps through a problem one computation at a time, as in the second level of Karel's difficulty. The third level, however, allows the user (the programmer) to let Karel (the program) to ask itself questions about the computations that need to be done. In this way, Karel is an excellent opportunity for new  programmers to be exposed to methodology in a comfortable, non threatening, game like manner.
+
+
+II. The Actors
+
+A. Karel
+
+Karel is the main character of this excerice.  You will control Karel in a variety of ways, but his main abilities are to turn right and left, to move forward one space, to pick up a gem, and to put down a gem.
+
+B. Walls 
+
+Walls are squares on the map that Karel can not move onto.  If you walk into a wall, Karel will crash! (not fully operational at this build)
+
+
+C. Gems
+
+Gems are objects on squares of the map (gems can not exist on walls, of course).  It is Karel's job to move around the map and pick these gems up.  He can only pick up a gem if he is standing directly on top of it.  More than one gem can exist on a tyle, so be sure to note how many gems are on a square at a time, and take that into consideration when controlling Karel's actions.
+
+D. Home Square
+
+The home square is essentially the game ender for Karel.  Once you have collected all gems from the map, Karel must go to his home and drop all of his gems onto the home square.  This will always be Karel's winning condition, no matter what the map is like.
+
+
+III. Button Mode
+
+A. Controlling with Buttons 
+
+The introductory level of the game will allow you to control Karel by clicking on a single button for each individual action.  These buttons are as follows:  Go  Left  Right  Get  Put.  The Go button, when clicked, will move Karel one space forward on the map, in whatever direction he is currently facing.  The Left button will turn Karel 90 degrees to the left (anti clockwise).  The Right button will turn Karel 90 degrees to the right (clockwise).  The Get button will pick up a single gem (remember, multiple gems can exist on one space!).  The Put button will put down a single gem (again, remember that multiple gems can exist on one space, so if you put a gem down on a gem there will be 2 gems on that square).
+
+B. Enabling Button Mode
+
+The game will load with Button Mode turned on.  If you are no longer in Button Mode (we'll get to that soon), you can click on the Button Mode in the main window and it will close all windows not related to Button Mode.  You may want to save your work in windows not related to Button Mode before pushing this button.
+
+C. Why Button Mode?
+
+Familiarizing yourself with the controls (buttons) in Button Mode is an important first step.  Each button is tied to a single action available to Karel.  In other modes of the game, you will use these same commands in the same way you have been using them in Button Mode, so make sure you understand what they do and remember how the buttons are labeled.
+
+
+IV. Programmer Mode
+
+
+A. Turning on Programmer Mode
+
+In order to enable Programmer Mode, click on the button labeled Programmer Mode in the main window of Karel.  This will open a text editor that you can write commands.
+
+A. Using Programmer Mode's text editor.
+
+You can write text in this window and then have Karel execute the commands represented by the text you have written.  In order to execute these commands, click on the File menu at the top left of the editor, then select Run.  The program will then run through all of the commands in the editor.  If any of these commands contain inappropriate syntax, you will be alerted of the fact and will also be told where your error is.  You can also save what you have written in this editor.  Click File and then choose either Auto Save or Save As, in order to do so.  The Auto Save option will automatically generate a file name for your saved file.  This file will be stored in the same place as the Karel program is stored, and the file name will be titled using the following format: KarelCode_<numerical day>_<name of the month>_<numerical hour>_<numerical minutes>_<numerical seconds>.txt.  Alternatively, you can select the Save As.  This will open a file explorer that will let you specify where in your file system to save the file, as well as what to name the file.  No matter what name you choose, this will save as a .txt extension.
+
+C. Now, Onto The Programming - Single Line Commands
+
+To start, you can write the same commands that you clicked on earlier.  Simply type "go", "left", "right", "get", "put" and Karel will behave exactly as if you had clicked these buttons one at a time.  In this way, you can write a series of commands and then select Run from the File menu, rather than manually clicking the button for every command.
+
+D. True or False?
+
+One new option available in Programmer Mode is essentially a truth checker.  This will allow you to check the truth of a statement before trying to commit unnecessary commands.  Truth checking can be used to find out if you are standing on a gem, staring at a wall directly ahead of you, or standing on the home square.  These commands can also be written to check if these things are not true.  To check the truth of a statement before executing commands, type: if <wall, gem, home>, then hit enter, then TAB once, then enter your commands, one line at a time.  You can also add the word "not" to these commands.  Two examples follow:
+
+if wall
+	left
+
+If you are on this step of the commands you have written and Karel is facing a wall, he will turn left.  Otherwise, Karel will skip this turn left command.
+
+if not wall
+	go
+
+If you are on this step of the commands you have written, and Karel is NOT facing a wall, he will go forward once.  If, on the other hand, Karel is facing a wall, he will skip this go command.
+
+
+E. Programming With Loops
+
+It's also important to understand that Programmer Mode also allows loop structures.  The simplest form of a loop simply repeats a given set of commands a set number of times.  To do this, you would type: repeat <a number>, then hit enter for a new line, then hit TAB once, and then type commands just like you did before.  For example, typing:
+
+repeat 3
+	go
+	left
+
+is exactly like typing:
+
+go
+left
+go
+left
+go
+left
+
+F. Truth Checking With Loops
+
+There is also a special option to simultaneously run a loop with an evaulation of whether or not something is true.  This is called a while loop.  Essentially, you are telling Karel to run a series of commands over and over while a given statement is true.  Karel will enter a while loop if the condition to enter is true.  Karel will then execute all commands inside the while loop once.  Karel will then go back to the top of the while loop and re-check to see if the condition to run is still true.  If it is true, Karel will run the command sequence again.  If it is not true, Karel will move past the while loop's commands.  An example may here be helpful:
+
+while not wall
+	go
+
+This will move Karel one space forward at a time, until he is standing in front of a wall.
+
+G. Combining All Of The Above
+
+You can use as many while, repeats, and ifs as you want a time.  This is called nesting.  To do this, you will have to remember how many of these specific structures you're using at a time, and maintain the appropriate number of TABs to differentiate between which lines of commands are associated with which structures.  Again, an example may be worthwhile here:
+
+while not wall
+	go
+	if wall
+		left
+
+The above series of commands will execute if Karel is not facing a wall.  Then, Karel will move forward one space.  Then, if Karel is facing a wall, he will turn left (anti clockwise).  Then, the loop will start back over.  If Karel is still facing a wall (a different wall, of course) even after turning left, the while loop will stop running.  If, however, Karel is no longer facing a wall, the while loop will continue running as before.
+
+H. A Word of Caution
+
+It is entirely possible to write a sequence of commands that will never, ever stop running.  These are called infinite loops.  A short example of an infinite loop is as such:
+
+while not wall
+	go
+	while wall
+		left
+
+This sequence of commands will send Karel ahead one space.  Then, it will check if Karel is facing a new wall.  If he is, Karel will turn left until he is no longer facing a wall.  Then, the loop is over and will restart from the top.  Because the "while wall -> left" sequence forced Karel to turn around until he was no longer facing a wall, the "while not wall" question will always be true.  That is, Karel will never be facing a wall if he enters this loop.  Thus, Karel will simply walk around this map forever, never stopping.  It is up to you, as Karel's controller, to help him avoid infinite loops.  Fortunately, we have given you a Stop Button to allow you to break Karel out of his Sisyphean toils, should he accidentally enter an infinite loop. (NOT YET IMPLEMENTED...)
+
+V. The Interface
+
+Most of the interface commands have been discussed at this point, such as the Run, Auto Save, and Save As options in Programmer Mode and the Button Mode/Programmer Mode buttons in the main window.  Additionally, you can click on the File menu in the main Karel window and select New Map From File.  This will reload the game with a new map of your specification (discussed later in this document) after allowing you to choose the map from a file explorer window.  Additional interface options include the Help menu.  Of course, if you're reading this, you've already figured out how to use the Help menu.  Finally, two counters exist on the far right/top corner of the main Karel window.  These are labeled Gem:___ and Moves:___.  The gem counter will display the number of gems that Karel is currently holding.  The move counter will display the number of moves that Karel has made since starting the game (both in Button and Programmer Mode).
+
+
+VI. Creating Maps - NOT YET IMPLEMENTED
+
+Maps must be a consistent size: 19 spaces across and 14 down.  The map must be surrounded entirely by a wall.  Aside from that, the only rules are that there must be at least one gem, only one Karel, and only one home square.  The appropriate legend for writing new maps is:
+
+# - Wall
+^ - Karel
+. - Home Square
+$ - Gem
+
+The default map is thus depicted as:
+
+###################
+#                 #
+#                 #
+#                 #
+#                 #
+#                 #
+#        $        #
+#       $#$       #
+#      $###$      #
+#     $#####$     #
+#    $#######$    #
+#   $#########$   #
+# ^ ###########  .#
+###################
+
+Once you've written a new map, you can click on the File menu in the main Karel window and select New Map from File.  This will open a file explorer that will allow you to locate and select a written map for the game to load.  Once loaded, the game will reset the display to the new map.
+
+
+VII. Some Closing Words
+
+We hope you have enjoyed learning with us.  While there is some functionality left to be implemented and perfected, we believe that this game should provide a valuable learning experience to new programmers.  
+
+Happy Coding!
