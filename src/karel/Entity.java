@@ -91,9 +91,7 @@ public class Entity
     
     public boolean isHomeCollision(int x, int y, Wall home)
     {   
-        Gem tempGem;
-        int number;
-        
+       
         if((home.x == x && home.y == y))
         {
            return true;

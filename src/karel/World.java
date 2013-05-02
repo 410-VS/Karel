@@ -76,7 +76,16 @@ public class World extends JPanel
     {
         return this.h;
     }
+    
+    public int getPlayerGem()
+    {
+        return karel.getGemCount();
+    }
 
+    public int getStepCount()
+    {
+        return karel.getSteps();
+    }
     
     //Reads the map and adds all objects and their coordinates to arraylists
     public final void initWorld()
@@ -170,7 +179,7 @@ public class World extends JPanel
             {
                 g.drawImage(item.getImage(), item.GetX(), item.GetY(), this);
             }
-
+            
     /*        if (completed) {
                 g.setColor(new Color(0, 0, 0));
                 g.drawString("Completed", 25, 20);

@@ -10,10 +10,12 @@ public class Player extends Entity
     char direction; //karels icon ^ > < v
     
     private int gemBag; //how many gems karel is holding
+    private int StepCounter;
     
     public Player(int x, int y) 
     {
         super(x, y);
+        StepCounter = 1;
         direction ='^';
 
         URL loc = this.getClass().getResource("up.png");
@@ -31,6 +33,10 @@ public class Player extends Entity
         this.SetY(newY);
     }
     
+    public int getSteps()
+    {
+        return this.StepCounter++;
+    }
     
     public void addGem()
     {
