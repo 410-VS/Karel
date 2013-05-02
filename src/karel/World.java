@@ -316,7 +316,7 @@ public class World extends JPanel
             // Building Menu
             JMenuBar bar1;
             JMenu menu1;
-            JMenuItem menuItem, menuSave;
+            JMenuItem menuItem, menuSave, menuSaveAs;
             bar1 = new JMenuBar();
             menu1 = new JMenu("File");
             menu1.setMnemonic(KeyEvent.VK_A);
@@ -326,9 +326,13 @@ public class World extends JPanel
             menuItem.setAccelerator(KeyStroke.getKeyStroke(
                                     KeyEvent.VK_1, ActionEvent.ALT_MASK));
             menu1.add(menuItem);
-           
-            menuSave = new JMenuItem("Save Code");
+
+            menuSaveAs = new JMenuItem("Auto Save");
+            menu1.add(menuSaveAs);
+            
+            menuSave = new JMenuItem("Save As");
             menu1.add(menuSave);
+            
             
             // Creating the JTextArea's
             textframe.setJMenuBar(bar1);
@@ -410,13 +414,8 @@ public class World extends JPanel
                              try 
                              {
                                  File fileToSave = fileChooser.getSelectedFile();
-                                 DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
-                                 Date date = new Date();
-             
-                                 String fileName1;
-                                 fileName1 = "KarelCode_";
-                                 fileName1 += dateFormat.format(date);
-                                 fileName1 += ".txt";
+
+
                                                            
                                  out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
                              } catch (FileNotFoundException ex) {
@@ -432,7 +431,39 @@ public class World extends JPanel
                             out.close();
 
                    }                       
-                });            
+                });
+
+            menuSaveAs.addActionListener(new ActionListener() 
+                {
+                   @Override
+                   public void actionPerformed(java.awt.event.ActionEvent e)
+                   {
+                       try 
+                       {
+                            List<String> user_input = Arrays.asList(jta.getText().split("\n"));
+                            PrintWriter out;
+                                 DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
+                            Date date = new Date();
+        
+                            String fileName1;
+                            fileName1 = "KarelCode_";
+                            fileName1 += dateFormat.format(date);
+                            fileName1 += ".txt";
+                           
+                            
+                            out = new PrintWriter(fileName1);
+                            
+                            for(int loop = 0; loop < user_input.size(); loop++)
+                            {
+                               out.println(user_input.get(loop));                                
+                            }
+
+                            out.close();
+                       } catch (FileNotFoundException ex) {
+                           Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }                       
+                });             
             
         }    
             
