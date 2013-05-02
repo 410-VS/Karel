@@ -3,6 +3,11 @@
  * and open the template in the editor.
  */
 package karel;
+
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  * @author Sam, Amber
@@ -315,7 +320,7 @@ public class Karel extends javax.swing.JFrame
 
         jMenu2.setText("Help");
 
-        jMenuItem3.setText("Open Help File (pdf)");
+        jMenuItem3.setText("Open Help File (.txt)");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -392,7 +397,12 @@ public class Karel extends javax.swing.JFrame
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
     //Open help file (write help file...)
-        // TODO add your handling code here:
+        Desktop dt = Desktop.getDesktop();
+        try
+        {
+            dt.open( new File("help.txt") );
+        } catch (IOException e) {//exception handling?
+            }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
