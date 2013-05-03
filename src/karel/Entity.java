@@ -89,10 +89,10 @@ public class Entity
         return -1;
     }
     
-    public boolean isHomeCollision(int x, int y, Wall home)
+    public boolean isHomeCollision(int x, int y, home Home)
     {   
        
-        if((home.x == x && home.y == y))
+        if (Home.x == x && Home.y == y)
         {
            return true;
         }
