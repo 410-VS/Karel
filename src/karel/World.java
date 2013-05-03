@@ -36,7 +36,7 @@ public class World extends JPanel
     private ArrayList gems = new ArrayList(); //gems in world
     private ArrayList areas = new ArrayList(); //floors
     private boolean isRunning = true; //game ending bool
-    Wall home = new Wall(0,0); // home space
+    //Wall home = new Wall(0,0); // home space
     protected Player karel; //object for karel 
     private int w = 18;
     private int h = 14;
@@ -58,7 +58,7 @@ public class World extends JPanel
             + "#     $#####$     #\n"
             + "#    $#######$    #\n"
             + "#   $#########$   #\n"
-            + "# ^ ###########   #\n"
+            + "# ^ ###########  @#\n"
             + "###################\n";
     
     //Constructor - Set up world
