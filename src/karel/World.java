@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -315,7 +316,7 @@ public class World extends JPanel
             // Building Menu
             JMenuBar bar1;
             JMenu menu1;
-            JMenuItem menuItem, menuSave;
+            JMenuItem menuItem, menuSave, menuSaveAs;
             bar1 = new JMenuBar();
             menu1 = new JMenu("File");
             menu1.setMnemonic(KeyEvent.VK_A);
@@ -325,13 +326,17 @@ public class World extends JPanel
             menuItem.setAccelerator(KeyStroke.getKeyStroke(
                                     KeyEvent.VK_1, ActionEvent.ALT_MASK));
             menu1.add(menuItem);
-           
-            menuSave = new JMenuItem("Save Code");
+
+            menuSaveAs = new JMenuItem("Auto Save");
+            menu1.add(menuSaveAs);
+            
+            menuSave = new JMenuItem("Save As");
             menu1.add(menuSave);
+            
             
             // Creating the JTextArea's
             textframe.setJMenuBar(bar1);
-            textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             JScrollPane textpane = new JScrollPane();
             jta = new JTextArea();
 	    lines = new JTextArea("1");
@@ -398,22 +403,55 @@ public class World extends JPanel
                    @Override
                    public void actionPerformed(java.awt.event.ActionEvent e)
                    {
+         		JFileChooser fileChooser = new JFileChooser();
+                	fileChooser.setDialogTitle("Specify a file to save");
+                        List<String> user_input = Arrays.asList(jta.getText().split("\n"));
+                        PrintWriter out = null;                      
+
+                        int userSelection = fileChooser.showSaveDialog(fileChooser);
+                        if (userSelection == JFileChooser.APPROVE_OPTION) 
+                        {
+                             try 
+                             {
+                                 File fileToSave = fileChooser.getSelectedFile();
+
+
+                                                           
+                                 out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
+                             } catch (FileNotFoundException ex) {
+                                 Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+                             }
+                        }
+                            
+                            for(int loop = 0; loop < user_input.size(); loop++)
+                            {
+                               out.println(user_input.get(loop));                                
+                            }
+
+                            out.close();
+
+                   }                       
+                });
+
+            menuSaveAs.addActionListener(new ActionListener() 
+                {
+                   @Override
+                   public void actionPerformed(java.awt.event.ActionEvent e)
+                   {
                        try 
                        {
                             List<String> user_input = Arrays.asList(jta.getText().split("\n"));
                             PrintWriter out;
-                            DateFormat dateFormat = new SimpleDateFormat("MM/dd@HH:mm:ss");
+                                 DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
                             Date date = new Date();
         
-                            String fileName1, fileName2;
-                            //fileName1 is desirable, but crashes due to file not found exception?
-                            fileName1 = "KarelCode-";
+                            String fileName1;
+                            fileName1 = "KarelCode_";
                             fileName1 += dateFormat.format(date);
                             fileName1 += ".txt";
                            
-                            fileName2 = "KarelProgrammerMode.txt";
                             
-                            out = new PrintWriter(fileName2);
+                            out = new PrintWriter(fileName1);
                             
                             for(int loop = 0; loop < user_input.size(); loop++)
                             {
@@ -425,7 +463,7 @@ public class World extends JPanel
                            Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
                        }
                    }                       
-                });            
+                });             
             
         }    
             
