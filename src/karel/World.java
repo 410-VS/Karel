@@ -422,20 +422,19 @@ public class World extends JPanel
                              {
                                  File fileToSave = fileChooser.getSelectedFile();
 
-
-                                                           
                                  out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
+                                 for(int loop = 0; loop < user_input.size(); loop++)
+                                 {
+                                    out.println(user_input.get(loop));                                
+                                 }
+
+                            out.close();
                              } catch (FileNotFoundException ex) {
                                  Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
                              }
                         }
                             
-                            for(int loop = 0; loop < user_input.size(); loop++)
-                            {
-                               out.println(user_input.get(loop));                                
-                            }
 
-                            out.close();
 
                    }                       
                 });
@@ -449,7 +448,7 @@ public class World extends JPanel
                        {
                             List<String> user_input = Arrays.asList(jta.getText().split("\n"));
                             PrintWriter out;
-                                 DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
+                            DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
                             Date date = new Date();
         
                             String fileName1;
