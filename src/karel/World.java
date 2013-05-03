@@ -36,10 +36,11 @@ public class World extends JPanel
     private ArrayList gems = new ArrayList(); //gems in world
     private ArrayList areas = new ArrayList(); //floors
     private boolean isRunning = true; //game ending bool
-    Wall home = new Wall(0,0); // home space
+    //Wall home = new Wall(0,0); // home space
     protected Player karel; //object for karel 
     private int w = 18;
     private int h = 14;
+    private home Home;
     JTextArea lines;
     JTextArea jta;
     
@@ -57,7 +58,7 @@ public class World extends JPanel
             + "#     $#####$     #\n"
             + "#    $#######$    #\n"
             + "#   $#########$   #\n"
-            + "# ^ ###########   #\n"
+            + "# ^ ###########  @#\n"
             + "###################\n";
     
     //Constructor - Set up world
@@ -144,8 +145,13 @@ public class World extends JPanel
             {
                 x += SPACE;
             }
+            else if (item == '@')
+            {
+                Home = new home(x,y);
+                x += SPACE;
+            }
 
-            h = y;
+            //home_square = y;
         }
         
    }
@@ -160,6 +166,7 @@ public class World extends JPanel
         world.addAll(areas);
         world.addAll(gems);
         world.add(karel);
+        world.add(Home);
         
         for (int i = 0; i < areas.size(); i++)
         {
@@ -171,7 +178,7 @@ public class World extends JPanel
 
             Entity item = (Entity) world.get(i);
 
-            if ((item instanceof Player)|| (item instanceof Gem)) 
+            if ((item instanceof Player)|| (item instanceof Gem) || (item instanceof home)) 
             {
                 g.drawImage(item.getImage(), item.GetX(), item.GetY(), this);
             } 
@@ -293,7 +300,7 @@ public class World extends JPanel
         {
             //collided with wall - do not move karel
         }
-        else if (karel.isHomeCollision(newX,newY,home))
+        else if (karel.isHomeCollision(newX,newY,Home))
         {
             //if karel is home and all gems are taken, move and end game
             if(gems.isEmpty())
@@ -747,13 +754,13 @@ public class World extends JPanel
                         else
                         { return false; }
                 case "not home":
-                        if (!karel.isHomeCollision(x, y, home))
+                        if (!karel.isHomeCollision(x, y, Home))
                         { return true; }
                         
                         else
                         { return false; }
                 case "home" :
-                        if (karel.isHomeCollision(x, y, home))
+                        if (karel.isHomeCollision(x, y, Home))
                         { return true; }
                         
                         else

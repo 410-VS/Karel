@@ -2,9 +2,8 @@ package karel;
 
 import java.net.*;
 import javax.swing.*;
-import java.awt.Image;
-import java.net.URL;
-import javax.swing.ImageIcon;
+import java.awt.*;
+
 /**
 
  @author H-Town
