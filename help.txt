@@ -134,7 +134,7 @@ V. The Interface
 Most of the interface commands have been discussed at this point, such as the Run, Auto Save, and Save As options in Programmer Mode and the Button Mode/Programmer Mode buttons in the main window.  Additionally, you can click on the File menu in the main Karel window and select New Map From File.  This will reload the game with a new map of your specification (discussed later in this document) after allowing you to choose the map from a file explorer window.  Additional interface options include the Help menu.  Of course, if you're reading this, you've already figured out how to use the Help menu.  Finally, two counters exist on the far right/top corner of the main Karel window.  These are labeled Gem:___ and Moves:___.  The gem counter will display the number of gems that Karel is currently holding.  The move counter will display the number of moves that Karel has made since starting the game (both in Button and Programmer Mode).
 
 
-VI. Creating Maps - NOT YET IMPLEMENTED
+VI. Creating Maps 
 
 Maps must be a consistent size: 19 spaces across and 14 down.  The map must be surrounded entirely by a wall.  Aside from that, the only rules are that there must be at least one gem, only one Karel, and only one home square.  The appropriate legend for writing new maps is:
 
@@ -157,7 +157,7 @@ The default map is thus depicted as:
 #     $#####$     #
 #    $#######$    #
 #   $#########$   #
-# ^ ###########  .#
+# ^ ###########  @#
 ###################
 
 Once you've written a new map, you can click on the File menu in the main Karel window and select New Map from File.  This will open a file explorer that will allow you to locate and select a written map for the game to load.  Once loaded, the game will reset the display to the new map.

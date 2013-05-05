@@ -88,6 +88,11 @@ public class World extends JPanel
         return karel.getSteps();
     }
     
+    public void setLevelString(String newLevel)
+    {
+        level = newLevel;
+    }
+    
     //Reads the map and adds all objects and their coordinates to arraylists
     public final void initWorld()
     {
@@ -289,6 +294,13 @@ public class World extends JPanel
         }
         this.repaint();
     }
+    
+    public void worldDeleter()
+    {//delete the gems, walls, areas arrayLists
+        gems.clear();
+        walls.clear();
+        areas.clear();
+    }
      
     public void handleMove(int x, int y)
     {
@@ -411,7 +423,7 @@ public class World extends JPanel
                    public void actionPerformed(java.awt.event.ActionEvent e)
                    {
          		JFileChooser fileChooser = new JFileChooser();
-                	fileChooser.setDialogTitle("Specify a file to save");
+                	fileChooser.setDialogTitle("Please Enter File Name and Choose Location");
                         List<String> user_input = Arrays.asList(jta.getText().split("\n"));
                         PrintWriter out = null;                      
 
@@ -433,9 +445,7 @@ public class World extends JPanel
                                  Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
                              }
                         }
-                            
-
-
+                           
                    }                       
                 });
 

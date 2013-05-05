@@ -5,8 +5,17 @@
 package karel;
 
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -69,8 +78,8 @@ public class Karel extends javax.swing.JFrame
         rightContainer = new javax.swing.JPanel();
         world = new karel.World();
         jMenuBar1 = new javax.swing.JMenuBar();
-        SaveCodeChoice = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
 
@@ -306,17 +315,17 @@ public class Karel extends javax.swing.JFrame
 
         mainContainer.add(middleContainer, java.awt.BorderLayout.CENTER);
 
-        SaveCodeChoice.setText("File");
+        jMenu1.setText("File");
 
-        jMenuItem1.setText("New Map from File");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem2.setText("Open New Map From File");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        SaveCodeChoice.add(jMenuItem1);
+        jMenu1.add(jMenuItem2);
 
-        jMenuBar1.add(SaveCodeChoice);
+        jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Help");
 
@@ -389,12 +398,6 @@ public class Karel extends javax.swing.JFrame
         world.actions();
     }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-    //New file - insert a new map 
-        
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
     //Open help file (write help file...)
         Desktop dt = Desktop.getDesktop();
@@ -404,6 +407,45 @@ public class Karel extends javax.swing.JFrame
         } catch (IOException e) {//exception handling?
             }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        // get a file path from the user
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Please Specify the File To Open");
+        File fileToOpen;
+        BufferedReader readIn;
+        String newMap = new String();
+        
+        int userSelection = userSelection = fileChooser.showOpenDialog(fileChooser);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) 
+        {
+            try {
+                fileToOpen = fileChooser.getSelectedFile();
+                readIn = new BufferedReader(new FileReader(fileToOpen));
+                
+                while(readIn.ready())
+                {
+                    newMap += readIn.readLine();
+                    newMap += '\n';
+                }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Karel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Karel.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+            //file is now in newMap string, turn string into actual new map!
+            world.setLevelString(newMap);
+            world.worldDeleter();
+            world.initWorld();
+
+            //paint
+            this.repaint();
+            
+        }
+        
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -452,7 +494,6 @@ public class Karel extends javax.swing.JFrame
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel GemCount;
-    private javax.swing.JMenu SaveCodeChoice;
     private javax.swing.JLabel StepCount;
     private javax.swing.JPanel bottomSubContainer;
     private javax.swing.JPanel buttonPanel;
@@ -466,9 +507,10 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
