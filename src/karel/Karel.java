@@ -4,9 +4,36 @@
  */
 package karel;
 
+import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Element;
+import static karel.World.infoBox;
 
 /**
  *
@@ -18,6 +45,10 @@ public class Karel extends javax.swing.JFrame
     /**
      * Creates new form Karel
      */
+    JTextArea lines;
+    JTextArea jta;
+    JFrame textframe;
+    
     public Karel()
     {
         this.setTitle("Karel");
@@ -30,7 +61,164 @@ public class Karel extends javax.swing.JFrame
     
     public void InitUI() 
     {
-        //edit
+      // Creating the popout frame with line numbering
+      textframe = new JFrame("Programmer Mode");
+      // Building Menu
+      JMenuBar bar1;
+      JMenu menu1;
+      JMenuItem menuItem, menuSave, menuSaveAs;
+      bar1 = new JMenuBar();
+      menu1 = new JMenu("File");
+      menu1.setMnemonic(KeyEvent.VK_A);
+      bar1.add(menu1);
+      menuItem = new JMenuItem("Run",
+                             KeyEvent.VK_T);
+      menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                                    KeyEvent.VK_1, ActionEvent.ALT_MASK));
+      menu1.add(menuItem);
+
+      menuSaveAs = new JMenuItem("Auto Save");
+      menu1.add(menuSaveAs);
+            
+      menuSave = new JMenuItem("Save As");
+      menu1.add(menuSave);
+            
+            
+      // Creating the JTextArea's
+      textframe.setJMenuBar(bar1);
+      JScrollPane textpane = new JScrollPane();
+      jta = new JTextArea();
+      lines = new JTextArea("1");
+      // Listening for input and adding lines
+      jta.getDocument().addDocumentListener(new DocumentListener()
+      {
+			public String getText()
+                        {
+				int caretPosition = jta.getDocument().getLength();
+				Element root = jta.getDocument().getDefaultRootElement();
+				String text = "1" + System.getProperty("line.separator");
+				for(int i = 2; i < root.getElementIndex( caretPosition ) + 2; i++)
+                                {
+					text += i + System.getProperty("line.separator");
+				}
+				return text;
+			}
+			@Override
+			public void changedUpdate(DocumentEvent de) {
+				lines.setText(getText());
+			}
+ 
+			@Override
+			public void insertUpdate(DocumentEvent de) {
+				lines.setText(getText());
+			}
+ 
+			@Override
+			public void removeUpdate(DocumentEvent de) {
+				lines.setText(getText());
+			}
+ 
+		});
+ 
+        textpane.getViewport().add(jta);
+        textpane.setRowHeaderView(lines);
+        textpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+ 
+        textframe.add(textpane);
+        textframe.pack();
+        textframe.setSize(500,500);
+        textframe.setVisible(false);
+        lines.setBackground(Color.LIGHT_GRAY);
+        lines.setEditable(false);
+        menuItem.addActionListener(new ActionListener() 
+        {
+                   @Override
+                   public void actionPerformed(java.awt.event.ActionEvent e)
+                   {
+                       final List<String> user_input = Arrays.asList(jta.getText().split("\n"));
+                       Thread loop;
+                       Runnable r1 = new Runnable()
+                       {
+                            public void run()
+                            {
+                                int line_count = world.doScript(0, 0, user_input); // Running
+                                if (line_count == user_input.size())
+                                {
+                                    infoBox("Successful run!", "Yay");
+                                }
+                            }
+                       };
+                       loop = new Thread(r1);
+                       loop.start();
+                   }
+                                           
+                                           
+                                           
+                                           
+        });
+        menuSave.addActionListener(new ActionListener() 
+        {
+                   @Override
+                   public void actionPerformed(java.awt.event.ActionEvent e)
+                   {
+         		JFileChooser fileChooser = new JFileChooser();
+                	fileChooser.setDialogTitle("Please Enter File Name and Choose Location");
+                        List<String> user_input = Arrays.asList(jta.getText().split("\n"));
+                        PrintWriter out = null;                      
+
+                        int userSelection = fileChooser.showSaveDialog(fileChooser);
+                        if (userSelection == JFileChooser.APPROVE_OPTION) 
+                        {
+                             try 
+                             {
+                                 File fileToSave = fileChooser.getSelectedFile();
+
+                                 out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
+                                 for(int loop = 0; loop < user_input.size(); loop++)
+                                 {
+                                    out.println(user_input.get(loop));                                
+                                 }
+
+                            out.close();
+                             } catch (FileNotFoundException ex) {
+                                 Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+                             }
+                        }
+                           
+                   }                       
+        });
+
+        menuSaveAs.addActionListener(new ActionListener() 
+        {
+                   @Override
+                   public void actionPerformed(java.awt.event.ActionEvent e)
+                   {
+                       try 
+                       {
+                            List<String> user_input = Arrays.asList(jta.getText().split("\n"));
+                            PrintWriter out;
+                            DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
+                            Date date = new Date();
+        
+                            String fileName1;
+                            fileName1 = "KarelCode_";
+                            fileName1 += dateFormat.format(date);
+                            fileName1 += ".txt";
+                           
+                            
+                            out = new PrintWriter(fileName1);
+                            
+                            for(int loop = 0; loop < user_input.size(); loop++)
+                            {
+                               out.println(user_input.get(loop));                                
+                            }
+
+                            out.close();
+                       } catch (FileNotFoundException ex) {
+                           Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }                       
+          });
         
     }
 
@@ -69,8 +257,8 @@ public class Karel extends javax.swing.JFrame
         rightContainer = new javax.swing.JPanel();
         world = new karel.World();
         jMenuBar1 = new javax.swing.JMenuBar();
-        SaveCodeChoice = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
 
@@ -119,7 +307,7 @@ public class Karel extends javax.swing.JFrame
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 631, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(StepCount)
@@ -228,7 +416,7 @@ public class Karel extends javax.swing.JFrame
                         .addComponent(jButton8)
                         .addGap(41, 41, 41)
                         .addComponent(jButton9)))
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(145, Short.MAX_VALUE))
         );
 
         buttonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jButton5, jButton6, jButton8, jButton9});
@@ -306,17 +494,17 @@ public class Karel extends javax.swing.JFrame
 
         mainContainer.add(middleContainer, java.awt.BorderLayout.CENTER);
 
-        SaveCodeChoice.setText("File");
+        jMenu1.setText("File");
 
-        jMenuItem1.setText("New Map from File");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem2.setText("Open New Map From File");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        SaveCodeChoice.add(jMenuItem1);
+        jMenu1.add(jMenuItem2);
 
-        jMenuBar1.add(SaveCodeChoice);
+        jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Help");
 
@@ -386,14 +574,8 @@ public class Karel extends javax.swing.JFrame
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton10ActionPerformed
     {//GEN-HEADEREND:event_jButton10ActionPerformed
         buttonPanel.setVisible(false);
-        world.actions();
+        textframe.setVisible(true);
     }//GEN-LAST:event_jButton10ActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-    //New file - insert a new map 
-        
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
     //Open help file (write help file...)
@@ -404,6 +586,45 @@ public class Karel extends javax.swing.JFrame
         } catch (IOException e) {//exception handling?
             }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        // get a file path from the user
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Please Specify the File To Open");
+        File fileToOpen;
+        BufferedReader readIn;
+        String newMap = new String();
+        
+        int userSelection = userSelection = fileChooser.showOpenDialog(fileChooser);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) 
+        {
+            try {
+                fileToOpen = fileChooser.getSelectedFile();
+                readIn = new BufferedReader(new FileReader(fileToOpen));
+                
+                while(readIn.ready())
+                {
+                    newMap += readIn.readLine();
+                    newMap += '\n';
+                }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Karel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Karel.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+            //file is now in newMap string, turn string into actual new map!
+            world.setLevelString(newMap);
+            world.worldDeleter();
+            world.initWorld();
+
+            //paint
+            this.repaint();
+            
+        }
+        
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -452,7 +673,6 @@ public class Karel extends javax.swing.JFrame
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel GemCount;
-    private javax.swing.JMenu SaveCodeChoice;
     private javax.swing.JLabel StepCount;
     private javax.swing.JPanel bottomSubContainer;
     private javax.swing.JPanel buttonPanel;
@@ -466,9 +686,10 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

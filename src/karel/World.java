@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
-import javax.swing.Timer;
 
 /**
  * Karel the Robot
@@ -31,7 +30,6 @@ import javax.swing.Timer;
 
 public class World extends JPanel
 {
-    private static int go = 0;
     private final int OFFSET = 0;
     private final int SPACE = 31;
     private ArrayList walls = new ArrayList();//walls in world
@@ -88,6 +86,11 @@ public class World extends JPanel
     public int getStepCount()
     {
         return karel.getSteps();
+    }
+    
+    public void setLevelString(String newLevel)
+    {
+        level = newLevel;
     }
     
     //Reads the map and adds all objects and their coordinates to arraylists
@@ -291,6 +294,13 @@ public class World extends JPanel
         }
         this.repaint();
     }
+    
+    public void worldDeleter()
+    {//delete the gems, walls, areas arrayLists
+        gems.clear();
+        walls.clear();
+        areas.clear();
+    }
      
     public void handleMove(int x, int y)
     {
@@ -317,179 +327,17 @@ public class World extends JPanel
             //move karel
             karel.move(x, y);
         }
-    }
-    public  void actions() 
-        {
-            // Creating the popout frame with line numbering
-            JFrame textframe = new JFrame("Programmer Mode");
-            // Building Menu
-            JMenuBar bar1;
-            JMenu menu1;
-            JMenuItem menuItem, menuSave, menuSaveAs;
-            bar1 = new JMenuBar();
-            menu1 = new JMenu("File");
-            menu1.setMnemonic(KeyEvent.VK_A);
-            bar1.add(menu1);
-            menuItem = new JMenuItem("Run",
-                                KeyEvent.VK_T);
-            menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                                    KeyEvent.VK_1, ActionEvent.ALT_MASK));
-            menu1.add(menuItem);
-
-            menuSaveAs = new JMenuItem("Auto Save");
-            menu1.add(menuSaveAs);
-            
-            menuSave = new JMenuItem("Save As");
-            menu1.add(menuSave);
-            
-            
-            // Creating the JTextArea's
-            textframe.setJMenuBar(bar1);
-//            textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            JScrollPane textpane = new JScrollPane();
-            jta = new JTextArea();
-	    lines = new JTextArea("1");
-            // Listening for input and adding lines
-            jta.getDocument().addDocumentListener(new DocumentListener()
-                {
-			public String getText()
-                        {
-				int caretPosition = jta.getDocument().getLength();
-				Element root = jta.getDocument().getDefaultRootElement();
-				String text = "1" + System.getProperty("line.separator");
-				for(int i = 2; i < root.getElementIndex( caretPosition ) + 2; i++)
-                                {
-					text += i + System.getProperty("line.separator");
-				}
-				return text;
-			}
-			@Override
-			public void changedUpdate(DocumentEvent de) {
-				lines.setText(getText());
-			}
- 
-			@Override
-			public void insertUpdate(DocumentEvent de) {
-				lines.setText(getText());
-			}
- 
-			@Override
-			public void removeUpdate(DocumentEvent de) {
-				lines.setText(getText());
-			}
- 
-		});
- 
-            textpane.getViewport().add(jta);
-            textpane.setRowHeaderView(lines);
-            textpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
- 
-            textframe.add(textpane);
-            textframe.pack();
-            textframe.setSize(500,500);
-            textframe.setVisible(true);
-            lines.setBackground(Color.LIGHT_GRAY);
-	    lines.setEditable(false);
-            menuItem.addActionListener(new ActionListener() 
-                {
-                   @Override
-                   public void actionPerformed(java.awt.event.ActionEvent e)
-                   {
-                       final List<String> user_input = Arrays.asList(jta.getText().split("\n"));
-                       Thread loop;
-                       Runnable r1 = new Runnable()
-                       {
-                            public void run()
-                            {
-                                int line_count = doScript(0, 0, user_input); // Running
-                                if (line_count == user_input.size())
-                                {
-                                    infoBox("Successful run!", "Yay");
-                                }
-                            }
-                       };
-                       loop = new Thread(r1);
-                       loop.start();
-                   }
-                 });
-            menuSave.addActionListener(new ActionListener() 
-                {
-                   @Override
-                   public void actionPerformed(java.awt.event.ActionEvent e)
-                   {
-         		JFileChooser fileChooser = new JFileChooser();
-                	fileChooser.setDialogTitle("Specify a file to save");
-                        List<String> user_input = Arrays.asList(jta.getText().split("\n"));
-                        PrintWriter out = null;                      
-
-                        int userSelection = fileChooser.showSaveDialog(fileChooser);
-                        if (userSelection == JFileChooser.APPROVE_OPTION) 
-                        {
-                             try 
-                             {
-                                 File fileToSave = fileChooser.getSelectedFile();
-
-                                 out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
-                                 for(int loop = 0; loop < user_input.size(); loop++)
-                                 {
-                                    out.println(user_input.get(loop));                                
-                                 }
-
-                            out.close();
-                             } catch (FileNotFoundException ex) {
-                                 Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
-                             }
-                        }
-                            
-
-
-                   }                       
-                });
-
-            menuSaveAs.addActionListener(new ActionListener() 
-                {
-                   @Override
-                   public void actionPerformed(java.awt.event.ActionEvent e)
-                   {
-                       try 
-                       {
-                            List<String> user_input = Arrays.asList(jta.getText().split("\n"));
-                            PrintWriter out;
-                            DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
-                            Date date = new Date();
-        
-                            String fileName1;
-                            fileName1 = "KarelCode_";
-                            fileName1 += dateFormat.format(date);
-                            fileName1 += ".txt";
-                           
-                            
-                            out = new PrintWriter(fileName1);
-                            
-                            for(int loop = 0; loop < user_input.size(); loop++)
-                            {
-                               out.println(user_input.get(loop));                                
-                            }
-
-                            out.close();
-                       } catch (FileNotFoundException ex) {
-                           Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
-                       }
-                   }                       
-                });             
-            
-        }    
-            
-            
+    }                        
         public int doScript(int line_count, int scope, List<String> user_input)
         { // Runs a user defined list of commands. Used recursively.
           // line_count is how far into the file we are
           // scope is the level of nested commands
           // user_input is the string array containing the file
+            
             int max_line_count = user_input.size(); // Size of the file
+            
             while (line_count < max_line_count) 
             { 
-                
                 String current_line = user_input.get(line_count); // Gets the line we're
                                                                  // dealing with
                 String tempstr = new String(); // Used for swapping strings
@@ -498,8 +346,8 @@ public class World extends JPanel
                 int repeat_num = 0; //The number of times to repeat. Initialized
                                     //to a valid value for error checking
                 int next_line = 0; //Keeps the next line when dealing with scope
-                final int throw_error = max_line_count + 1; // Error return value                             
-                       
+                final int throw_error = max_line_count + 1; // Error return value
+                
                 if (current_line.isEmpty())
                 {
                     line_count++;
@@ -522,15 +370,14 @@ public class World extends JPanel
                             current_line = current_line.substring(1); // Removing the tab
                         }
                     }
-                    // Scope of line is deeper than our current scope
                     if (current_line.startsWith("\t"))
                     {
                         ++line_count;
                         continue;
                     }
-                }  
+                }
                 current_line = current_line.trim();
-
+                
                 /* Parsing the current line for recognizable Syntax */
                 if (current_line.matches("^repeat [0-9]{1,}$"))
                 {
@@ -553,8 +400,7 @@ public class World extends JPanel
                     tempstr = current_line.substring(0, 5); // Grabbing while
                     current_line = tempstr;
                 }
-                /* End Parsing */  
-                
+                /* End Parsing */                
                 switch (current_line)
                 { // Controls the logic for each valid command
                   // If input is something unexpected, it halts execution and
@@ -568,11 +414,11 @@ public class World extends JPanel
                     case "go"   : 
                     case "put"  :
                     case "get"  :
-                            choiceMade(current_line);
                             try{
                                     Thread.currentThread().sleep(500);
                                 }
                             catch(Exception e){};
+                            choiceMade(current_line);
                             break;
                     case "repeat":  
                             // Checking if the repeat integer is out of range 
@@ -639,11 +485,10 @@ public class World extends JPanel
                                         break;
                                     }
                                 }
-                                // If we failed to find Else statement, moves on
                                 if (else_line >= max_line_count)
                                 {
-                                   ++line_count;
-                                   continue;
+                                    ++line_count;
+                                    break;
                                 }
                                 // End check for accompanying Else
                                
@@ -675,7 +520,7 @@ public class World extends JPanel
                             // End "If-Else" case
                         
                     case "while" :
-                            // Checking if the conditional is blank                           
+                            // Checking if the conditional is blank
                             if(conditional.isEmpty())
                             { 
                                 infoBox("Expected condition"
@@ -698,10 +543,10 @@ public class World extends JPanel
                             break;
                              // End "While" case
                         
-                    default:                     
-                           infoBox("Unrecognized syntax\n" 
+                    default: 
+                            infoBox("Unrecognized syntax\n" 
                                     + current_line 
-                                    + "\nOn line " + (line_count + 1), "ERROR");                           
+                                    + "\nOn line " + (line_count + 1), "ERROR");
                             return throw_error;
                 }
                 ++line_count;
@@ -771,13 +616,13 @@ public class World extends JPanel
                         else
                         { return false; }
                 case "not home":
-                        if (!karel.isHomeCollision(newX, newY, Home))
+                        if (!karel.isHomeCollision(x, y, Home))
                         { return true; }
                         
                         else
                         { return false; }
                 case "home" :
-                        if (karel.isHomeCollision(newX, newY, Home))
+                        if (karel.isHomeCollision(x, y, Home))
                         { return true; }
                         
                         else
@@ -789,23 +634,5 @@ public class World extends JPanel
         public static void infoBox(String infoMessage, String location)
         {
             JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + location, JOptionPane.INFORMATION_MESSAGE);
-        }
-        
-        public static int waiter(int time)
-        {
-            Timer movetimer;
-            go = 0;
-            movetimer = new Timer(time, new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                   go = 1;
-                }
-            });
-            movetimer.setRepeats(false);
-            movetimer.start();
-            while (go == 0);
-            return 1;
         }
 }
