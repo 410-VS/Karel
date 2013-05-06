@@ -319,7 +319,7 @@ public class World extends JPanel
             {
                 karel.move(x,y);
                 isRunning = false;
-                System.out.println("You have won!");
+                infoBox("You have won!", "Congratulations!");
             }
         }
         else
