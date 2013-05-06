@@ -4,52 +4,18 @@
  */
 package karel;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 import java.awt.Desktop;
-=======
-import java.awt.Color;
-import java.awt.Desktop;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
->>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
 import java.io.BufferedReader;
-=======
-import java.awt.Desktop;
->>>>>>> parent of 2d6baf2... Moved popup window to Karel class
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-<<<<<<< HEAD
 import java.io.PrintWriter;
-<<<<<<< HEAD
 import java.util.Arrays;
-=======
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
->>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-<<<<<<< HEAD
-=======
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Element;
-import static karel.World.infoBox;
->>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
-=======
->>>>>>> parent of 2d6baf2... Moved popup window to Karel class
 
 /**
  *
@@ -85,7 +51,8 @@ public class Karel extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         mainContainer = new javax.swing.JPanel();
         topSubContainer = new javax.swing.JPanel();
@@ -112,17 +79,9 @@ public class Karel extends javax.swing.JFrame
         rightContainer = new javax.swing.JPanel();
         world = new karel.World();
         jMenuBar1 = new javax.swing.JMenuBar();
-<<<<<<< HEAD
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
-<<<<<<< HEAD
         jMenuItem1 = new javax.swing.JMenuItem();
-=======
->>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
-=======
-        SaveCodeChoice = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
->>>>>>> parent of 2d6baf2... Moved popup window to Karel class
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
 
@@ -141,15 +100,19 @@ public class Karel extends javax.swing.JFrame
         topSubContainer.setPreferredSize(new java.awt.Dimension(733, 28));
 
         jButton3.setText("Button Mode");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton3ActionPerformed(evt);
             }
         });
 
         jButton10.setText("Manual Mode");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton10.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton10ActionPerformed(evt);
             }
         });
@@ -171,15 +134,7 @@ public class Karel extends javax.swing.JFrame
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
-<<<<<<< HEAD
-<<<<<<< HEAD
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
-=======
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 631, Short.MAX_VALUE)
->>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
-=======
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
->>>>>>> parent of 2d6baf2... Moved popup window to Karel class
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(StepCount)
@@ -235,36 +190,46 @@ public class Karel extends javax.swing.JFrame
         buttonPanel.setVisible(false);
 
         jButton4.setText("Go");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton4.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton4ActionPerformed(evt);
             }
         });
 
         jButton5.setText("Left");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton5.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton5ActionPerformed(evt);
             }
         });
 
         jButton6.setText("Right");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton6.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton6ActionPerformed(evt);
             }
         });
 
         jButton8.setText("Get");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton8.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton8ActionPerformed(evt);
             }
         });
 
         jButton9.setText("Put");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton9.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton9ActionPerformed(evt);
             }
         });
@@ -366,38 +331,37 @@ public class Karel extends javax.swing.JFrame
 
         mainContainer.add(middleContainer, java.awt.BorderLayout.CENTER);
 
-        SaveCodeChoice.setText("File");
+        jMenu1.setText("File");
 
-        jMenuItem1.setText("New Map from File");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+        jMenuItem2.setText("Open New Map From File");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        SaveCodeChoice.add(jMenuItem1);
+        jMenu1.add(jMenuItem2);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         jMenuItem1.setText("Reset Current Map");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItem1ActionPerformed(evt);
             }
         });
         jMenu1.add(jMenuItem1);
 
-=======
->>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
         jMenuBar1.add(jMenu1);
-=======
-        jMenuBar1.add(SaveCodeChoice);
->>>>>>> parent of 2d6baf2... Moved popup window to Karel class
 
         jMenu2.setText("Help");
 
         jMenuItem3.setText("Open Help File (.txt)");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItem3ActionPerformed(evt);
             }
         });
@@ -464,12 +428,6 @@ public class Karel extends javax.swing.JFrame
         world.actions();
     }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-    //New file - insert a new map 
-        
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
     //Open help file (write help file...)
         Desktop dt = Desktop.getDesktop();
@@ -480,7 +438,6 @@ public class Karel extends javax.swing.JFrame
             }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-<<<<<<< HEAD
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         // get a file path from the user
@@ -520,7 +477,6 @@ public class Karel extends javax.swing.JFrame
         
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-<<<<<<< HEAD
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         world.worldDeleter();
@@ -530,10 +486,6 @@ public class Karel extends javax.swing.JFrame
         this.repaint();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-=======
->>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
-=======
->>>>>>> parent of 2d6baf2... Moved popup window to Karel class
     /**
      * @param args the command line arguments
      */
@@ -581,7 +533,6 @@ public class Karel extends javax.swing.JFrame
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel GemCount;
-    private javax.swing.JMenu SaveCodeChoice;
     private javax.swing.JLabel StepCount;
     private javax.swing.JPanel bottomSubContainer;
     private javax.swing.JPanel buttonPanel;
@@ -595,17 +546,11 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-<<<<<<< HEAD
-<<<<<<< HEAD
     private javax.swing.JMenuItem jMenuItem1;
-=======
->>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
     private javax.swing.JMenuItem jMenuItem2;
-=======
-    private javax.swing.JMenuItem jMenuItem1;
->>>>>>> parent of 2d6baf2... Moved popup window to Karel class
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
