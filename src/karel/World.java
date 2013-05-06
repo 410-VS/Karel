@@ -2,25 +2,10 @@ package karel;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
 import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Element;
+
 
 /**
  * Karel the Robot
@@ -327,162 +312,7 @@ public class World extends JPanel
             //move karel
             karel.move(x, y);
         }
-    }
-    public  void actions() 
-        {
-            // Creating the popout frame with line numbering
-            JFrame textframe = new JFrame("Programmer Mode");
-            // Building Menu
-            JMenuBar bar1;
-            JMenu menu1;
-            JMenuItem menuItem, menuSave, menuSaveAs;
-            bar1 = new JMenuBar();
-            menu1 = new JMenu("File");
-            menu1.setMnemonic(KeyEvent.VK_A);
-            bar1.add(menu1);
-            menuItem = new JMenuItem("Run",
-                                KeyEvent.VK_T);
-            menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                                    KeyEvent.VK_1, ActionEvent.ALT_MASK));
-            menu1.add(menuItem);
-
-            menuSaveAs = new JMenuItem("Auto Save");
-            menu1.add(menuSaveAs);
-            
-            menuSave = new JMenuItem("Save As");
-            menu1.add(menuSave);
-            
-            
-            // Creating the JTextArea's
-            textframe.setJMenuBar(bar1);
-//            textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            JScrollPane textpane = new JScrollPane();
-            jta = new JTextArea();
-	    lines = new JTextArea("1");
-            // Listening for input and adding lines
-            jta.getDocument().addDocumentListener(new DocumentListener()
-                {
-			public String getText()
-                        {
-				int caretPosition = jta.getDocument().getLength();
-				Element root = jta.getDocument().getDefaultRootElement();
-				String text = "1" + System.getProperty("line.separator");
-				for(int i = 2; i < root.getElementIndex( caretPosition ) + 2; i++)
-                                {
-					text += i + System.getProperty("line.separator");
-				}
-				return text;
-			}
-			@Override
-			public void changedUpdate(DocumentEvent de) {
-				lines.setText(getText());
-			}
- 
-			@Override
-			public void insertUpdate(DocumentEvent de) {
-				lines.setText(getText());
-			}
- 
-			@Override
-			public void removeUpdate(DocumentEvent de) {
-				lines.setText(getText());
-			}
- 
-		});
- 
-            textpane.getViewport().add(jta);
-            textpane.setRowHeaderView(lines);
-            textpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
- 
-            textframe.add(textpane);
-            textframe.pack();
-            textframe.setSize(500,500);
-            textframe.setVisible(true);
-            lines.setBackground(Color.LIGHT_GRAY);
-	    lines.setEditable(false);
-            menuItem.addActionListener(new ActionListener() 
-                {
-                   @Override
-                   public void actionPerformed(java.awt.event.ActionEvent e)
-                   {
-                       List<String> user_input = Arrays.asList(jta.getText().split("\n"));
-                       int line_count = doScript(0, 0, user_input); // Running
-                       if (line_count == user_input.size())
-                       {
-                           infoBox("Successful run!", "Yay");
-                       }
-                   }
-                                           
-                                           
-                                           
-                                           
-                });
-            menuSave.addActionListener(new ActionListener() 
-                {
-                   @Override
-                   public void actionPerformed(java.awt.event.ActionEvent e)
-                   {
-         		JFileChooser fileChooser = new JFileChooser();
-                	fileChooser.setDialogTitle("Please Enter File Name and Choose Location");
-                        List<String> user_input = Arrays.asList(jta.getText().split("\n"));
-                        PrintWriter out = null;                      
-
-                        int userSelection = fileChooser.showSaveDialog(fileChooser);
-                        if (userSelection == JFileChooser.APPROVE_OPTION) 
-                        {
-                             try 
-                             {
-                                 File fileToSave = fileChooser.getSelectedFile();
-
-                                 out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
-                                 for(int loop = 0; loop < user_input.size(); loop++)
-                                 {
-                                    out.println(user_input.get(loop));                                
-                                 }
-
-                            out.close();
-                             } catch (FileNotFoundException ex) {
-                                 Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
-                             }
-                        }
-                           
-                   }                       
-                });
-
-            menuSaveAs.addActionListener(new ActionListener() 
-                {
-                   @Override
-                   public void actionPerformed(java.awt.event.ActionEvent e)
-                   {
-                       try 
-                       {
-                            List<String> user_input = Arrays.asList(jta.getText().split("\n"));
-                            PrintWriter out;
-                            DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
-                            Date date = new Date();
-        
-                            String fileName1;
-                            fileName1 = "KarelCode_";
-                            fileName1 += dateFormat.format(date);
-                            fileName1 += ".txt";
-                           
-                            
-                            out = new PrintWriter(fileName1);
-                            
-                            for(int loop = 0; loop < user_input.size(); loop++)
-                            {
-                               out.println(user_input.get(loop));                                
-                            }
-
-                            out.close();
-                       } catch (FileNotFoundException ex) {
-                           Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
-                       }
-                   }                       
-                });             
-            
-        }    
-            
+    }              
             
         public int doScript(int line_count, int scope, List<String> user_input)
         { // Runs a user defined list of commands. Used recursively.
@@ -528,8 +358,8 @@ public class World extends JPanel
                     }
                     if (current_line.startsWith("\t"))
                     {
-                        infoBox("Undefined scope on line " + (line_count + 1), "ERROR");
-                        return throw_error;
+                        ++line_count;
+                        continue;
                     }
                 }
                 current_line = current_line.trim();
@@ -570,8 +400,13 @@ public class World extends JPanel
                     case "go"   : 
                     case "put"  :
                     case "get"  :
-                            choiceMade(current_line);
-                            break;
+                           try 
+                           {
+                               Thread.currentThread().sleep(500);
+                           }
+                           catch(Exception e){}; 
+                           choiceMade(current_line);
+                           break;
                     case "repeat":  
                             // Checking if the repeat integer is out of range 
                             if ((repeat_num < 1) || (repeat_num > 999))
@@ -634,8 +469,13 @@ public class World extends JPanel
                                     // If we can't find an accompanying Else
                                     if (else_line >= max_line_count)
                                     {
-                                        return line_count;
+                                        break;
                                     }
+                                }
+                                if (else_line >= max_line_count)
+                                {
+                                    ++line_count;
+                                    continue;
                                 }
                                 // End check for accompanying Else
                                

@@ -4,18 +4,36 @@
  */
 package karel;
 
+import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Element;
+import java.lang.*;
 
 /**
  *
@@ -24,6 +42,10 @@ import javax.swing.JFileChooser;
 public class Karel extends javax.swing.JFrame
 {
     private final int OFFSET = 0;
+    
+    JTextArea lines;
+    JTextArea textarea;
+    JFrame textframe;
     /**
      * Creates new form Karel
      */
@@ -39,8 +61,163 @@ public class Karel extends javax.swing.JFrame
     
     public void InitUI() 
     {
-        //edit
-        
+        // Creating the popout frame with line numbering
+        textframe = new JFrame("Programmer Mode");
+        // Building Menu
+        JMenuBar textbar;
+        JMenu textmenu;
+        JMenuItem menuRun, menuSave, menuSaveAs;
+        textbar = new JMenuBar();
+        textmenu = new JMenu("File");
+        textmenu.setMnemonic(KeyEvent.VK_A);
+        textbar.add(textmenu);
+        menuRun = new JMenuItem("Run",
+                                  KeyEvent.VK_T);
+        menuRun.setAccelerator(KeyStroke.getKeyStroke(
+                                    KeyEvent.VK_1, ActionEvent.ALT_MASK));
+        textmenu.add(menuRun);
+
+        menuSaveAs = new JMenuItem("Auto Save");
+        textmenu.add(menuSaveAs);
+
+        menuSave = new JMenuItem("Save As");
+        textmenu.add(menuSave);
+
+
+        // Creating the JTextArea's
+        textframe.setJMenuBar(textbar);
+//            textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JScrollPane textpane = new JScrollPane();
+        textarea = new JTextArea();
+        lines = new JTextArea("1");
+        // Listening for input and adding lines
+        textarea.getDocument().addDocumentListener(new DocumentListener()
+            {
+                    public String getText()
+                    {
+                            int caretPosition = textarea.getDocument().getLength();
+                            Element root = textarea.getDocument().getDefaultRootElement();
+                            String text = "1" + System.getProperty("line.separator");
+                            for(int i = 2; i < root.getElementIndex( caretPosition ) + 2; i++)
+                            {
+                                    text += i + System.getProperty("line.separator");
+                            }
+                            return text;
+                    }
+                    @Override
+                    public void changedUpdate(DocumentEvent de) {
+                            lines.setText(getText());
+                    }
+
+                    @Override
+                    public void insertUpdate(DocumentEvent de) {
+                            lines.setText(getText());
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent de) {
+                            lines.setText(getText());
+                    }
+
+            });
+
+        textpane.getViewport().add(textarea);
+        textpane.setRowHeaderView(lines);
+        textpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        textframe.add(textpane);
+        textframe.pack();
+        textframe.setSize(500,500);
+        textframe.setVisible(false);
+        lines.setBackground(Color.LIGHT_GRAY);
+        lines.setEditable(false);
+        menuRun.addActionListener(new ActionListener() 
+        {
+               @Override
+               public void actionPerformed(java.awt.event.ActionEvent e)
+               {
+                        final List<String> user_input = Arrays.asList(textarea.getText().split("\n"));
+                        Thread loop;
+                        Runnable r1 = new Runnable()
+                        {
+                             public void run()
+                             {
+                                  int line_count = world.doScript(0, 0, user_input); // Running
+
+                              }
+                         };
+                         loop = new Thread(r1);
+                         loop.start();
+               }
+
+
+
+
+            });
+        menuSave.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(java.awt.event.ActionEvent e)
+               {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Please Enter File Name and Choose Location");
+                    List<String> user_input = Arrays.asList(textarea.getText().split("\n"));
+                    PrintWriter out = null;                      
+
+                    int userSelection = fileChooser.showSaveDialog(fileChooser);
+                    if (userSelection == JFileChooser.APPROVE_OPTION) 
+                    {
+                         try 
+                         {
+                             File fileToSave = fileChooser.getSelectedFile();
+
+                             out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
+                             for(int loop = 0; loop < user_input.size(); loop++)
+                             {
+                                out.println(user_input.get(loop));                                
+                             }
+
+                        out.close();
+                         } catch (FileNotFoundException ex) {
+                             Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+                         }
+                    }
+
+               }                       
+            });
+
+        menuSaveAs.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(java.awt.event.ActionEvent e)
+               {
+                   try 
+                   {
+                        List<String> user_input = Arrays.asList(textarea.getText().split("\n"));
+                        PrintWriter out;
+                        DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
+                        Date date = new Date();
+
+                        String fileName1;
+                        fileName1 = "KarelCode_";
+                        fileName1 += dateFormat.format(date);
+                        fileName1 += ".txt";
+
+
+                        out = new PrintWriter(fileName1);
+
+                        for(int loop = 0; loop < user_input.size(); loop++)
+                        {
+                           out.println(user_input.get(loop));                                
+                        }
+
+                        out.close();
+                   } catch (FileNotFoundException ex) {
+                       Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+                   }
+               }                       
+            });      
+
     }
 
 
@@ -425,7 +602,7 @@ public class Karel extends javax.swing.JFrame
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton10ActionPerformed
     {//GEN-HEADEREND:event_jButton10ActionPerformed
         buttonPanel.setVisible(false);
-        world.actions();
+        textframe.setVisible(true);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
