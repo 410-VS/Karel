@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
+import javax.swing.Timer;
 
 /**
  * Karel the Robot
@@ -30,6 +31,7 @@ import javax.swing.text.Element;
 
 public class World extends JPanel
 {
+    private static int go = 0;
     private final int OFFSET = 0;
     private final int SPACE = 31;
     private ArrayList walls = new ArrayList();//walls in world
@@ -86,11 +88,6 @@ public class World extends JPanel
     public int getStepCount()
     {
         return karel.getSteps();
-    }
-    
-    public void setLevelString(String newLevel)
-    {
-        level = newLevel;
     }
     
     //Reads the map and adds all objects and their coordinates to arraylists
@@ -294,13 +291,6 @@ public class World extends JPanel
         }
         this.repaint();
     }
-    
-    public void worldDeleter()
-    {//delete the gems, walls, areas arrayLists
-        gems.clear();
-        walls.clear();
-        areas.clear();
-    }
      
     public void handleMove(int x, int y)
     {
@@ -328,6 +318,9 @@ public class World extends JPanel
             karel.move(x, y);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of 2d6baf2... Moved popup window to Karel class
     }
     public  void actions() 
         {
@@ -406,6 +399,7 @@ public class World extends JPanel
                    @Override
                    public void actionPerformed(java.awt.event.ActionEvent e)
                    {
+<<<<<<< HEAD
                        List<String> user_input = Arrays.asList(jta.getText().split("\n"));
                        int line_count = doScript(0, 0, user_input); // Running
                        if (line_count == user_input.size())
@@ -418,13 +412,36 @@ public class World extends JPanel
                                            
                                            
                 });
+=======
+                       final List<String> user_input = Arrays.asList(jta.getText().split("\n"));
+                       Thread loop;
+                       Runnable r1 = new Runnable()
+                       {
+                            public void run()
+                            {
+                                int line_count = doScript(0, 0, user_input); // Running
+                                if (line_count == user_input.size())
+                                {
+                                    infoBox("Successful run!", "Yay");
+                                }
+                            }
+                       };
+                       loop = new Thread(r1);
+                       loop.start();
+                   }
+                 });
+>>>>>>> parent of 2d6baf2... Moved popup window to Karel class
             menuSave.addActionListener(new ActionListener() 
                 {
                    @Override
                    public void actionPerformed(java.awt.event.ActionEvent e)
                    {
          		JFileChooser fileChooser = new JFileChooser();
+<<<<<<< HEAD
                 	fileChooser.setDialogTitle("Please Enter File Name and Choose Location");
+=======
+                	fileChooser.setDialogTitle("Specify a file to save");
+>>>>>>> parent of 2d6baf2... Moved popup window to Karel class
                         List<String> user_input = Arrays.asList(jta.getText().split("\n"));
                         PrintWriter out = null;                      
 
@@ -446,7 +463,13 @@ public class World extends JPanel
                                  Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
                              }
                         }
+<<<<<<< HEAD
                            
+=======
+                            
+
+
+>>>>>>> parent of 2d6baf2... Moved popup window to Karel class
                    }                       
                 });
 
@@ -485,19 +508,21 @@ public class World extends JPanel
         }    
             
             
+<<<<<<< HEAD
 =======
     }                        
 >>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
+=======
+>>>>>>> parent of 2d6baf2... Moved popup window to Karel class
         public int doScript(int line_count, int scope, List<String> user_input)
         { // Runs a user defined list of commands. Used recursively.
           // line_count is how far into the file we are
           // scope is the level of nested commands
           // user_input is the string array containing the file
-            
             int max_line_count = user_input.size(); // Size of the file
-            
             while (line_count < max_line_count) 
             { 
+                
                 String current_line = user_input.get(line_count); // Gets the line we're
                                                                  // dealing with
                 String tempstr = new String(); // Used for swapping strings
@@ -506,8 +531,8 @@ public class World extends JPanel
                 int repeat_num = 0; //The number of times to repeat. Initialized
                                     //to a valid value for error checking
                 int next_line = 0; //Keeps the next line when dealing with scope
-                final int throw_error = max_line_count + 1; // Error return value
-                
+                final int throw_error = max_line_count + 1; // Error return value                             
+                       
                 if (current_line.isEmpty())
                 {
                     line_count++;
@@ -530,14 +555,15 @@ public class World extends JPanel
                             current_line = current_line.substring(1); // Removing the tab
                         }
                     }
+                    // Scope of line is deeper than our current scope
                     if (current_line.startsWith("\t"))
                     {
                         ++line_count;
                         continue;
                     }
-                }
+                }  
                 current_line = current_line.trim();
-                
+
                 /* Parsing the current line for recognizable Syntax */
                 if (current_line.matches("^repeat [0-9]{1,}$"))
                 {
@@ -560,7 +586,8 @@ public class World extends JPanel
                     tempstr = current_line.substring(0, 5); // Grabbing while
                     current_line = tempstr;
                 }
-                /* End Parsing */                
+                /* End Parsing */  
+                
                 switch (current_line)
                 { // Controls the logic for each valid command
                   // If input is something unexpected, it halts execution and
@@ -574,11 +601,11 @@ public class World extends JPanel
                     case "go"   : 
                     case "put"  :
                     case "get"  :
+                            choiceMade(current_line);
                             try{
                                     Thread.currentThread().sleep(500);
                                 }
                             catch(Exception e){};
-                            choiceMade(current_line);
                             break;
                     case "repeat":  
                             // Checking if the repeat integer is out of range 
@@ -645,10 +672,11 @@ public class World extends JPanel
                                         break;
                                     }
                                 }
+                                // If we failed to find Else statement, moves on
                                 if (else_line >= max_line_count)
                                 {
-                                    ++line_count;
-                                    break;
+                                   ++line_count;
+                                   continue;
                                 }
                                 // End check for accompanying Else
                                
@@ -680,7 +708,7 @@ public class World extends JPanel
                             // End "If-Else" case
                         
                     case "while" :
-                            // Checking if the conditional is blank
+                            // Checking if the conditional is blank                           
                             if(conditional.isEmpty())
                             { 
                                 infoBox("Expected condition"
@@ -703,10 +731,10 @@ public class World extends JPanel
                             break;
                              // End "While" case
                         
-                    default: 
-                            infoBox("Unrecognized syntax\n" 
+                    default:                     
+                           infoBox("Unrecognized syntax\n" 
                                     + current_line 
-                                    + "\nOn line " + (line_count + 1), "ERROR");
+                                    + "\nOn line " + (line_count + 1), "ERROR");                           
                             return throw_error;
                 }
                 ++line_count;
@@ -776,13 +804,13 @@ public class World extends JPanel
                         else
                         { return false; }
                 case "not home":
-                        if (!karel.isHomeCollision(x, y, Home))
+                        if (!karel.isHomeCollision(newX, newY, Home))
                         { return true; }
                         
                         else
                         { return false; }
                 case "home" :
-                        if (karel.isHomeCollision(x, y, Home))
+                        if (karel.isHomeCollision(newX, newY, Home))
                         { return true; }
                         
                         else
@@ -794,5 +822,23 @@ public class World extends JPanel
         public static void infoBox(String infoMessage, String location)
         {
             JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + location, JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        public static int waiter(int time)
+        {
+            Timer movetimer;
+            go = 0;
+            movetimer = new Timer(time, new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                   go = 1;
+                }
+            });
+            movetimer.setRepeats(false);
+            movetimer.start();
+            while (go == 0);
+            return 1;
         }
 }
