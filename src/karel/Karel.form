@@ -17,6 +17,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem2ActionPerformed"/>
               </Events>
             </MenuItem>
+<<<<<<< HEAD
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Reset Current Map"/>
@@ -25,6 +26,8 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
               </Events>
             </MenuItem>
+=======
+>>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
@@ -128,7 +131,11 @@
                       <Component id="jButton3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButton10" min="-2" max="-2" attributes="0"/>
+<<<<<<< HEAD
                       <EmptySpace pref="635" max="32767" attributes="0"/>
+=======
+                      <EmptySpace pref="631" max="32767" attributes="0"/>
+>>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="StepCount" min="-2" max="-2" attributes="0"/>
@@ -309,7 +316,7 @@
                                       <Component id="jButton9" linkSize="1" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="149" max="32767" attributes="0"/>
+                              <EmptySpace pref="145" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>

@@ -327,6 +327,7 @@ public class World extends JPanel
             //move karel
             karel.move(x, y);
         }
+<<<<<<< HEAD
     }
     public  void actions() 
         {
@@ -484,6 +485,9 @@ public class World extends JPanel
         }    
             
             
+=======
+    }                        
+>>>>>>> 2d6baf26ecad1fe7d231b02ebac790f0d3a2f61e
         public int doScript(int line_count, int scope, List<String> user_input)
         { // Runs a user defined list of commands. Used recursively.
           // line_count is how far into the file we are
@@ -528,8 +532,8 @@ public class World extends JPanel
                     }
                     if (current_line.startsWith("\t"))
                     {
-                        infoBox("Undefined scope on line " + (line_count + 1), "ERROR");
-                        return throw_error;
+                        ++line_count;
+                        continue;
                     }
                 }
                 current_line = current_line.trim();
@@ -570,6 +574,10 @@ public class World extends JPanel
                     case "go"   : 
                     case "put"  :
                     case "get"  :
+                            try{
+                                    Thread.currentThread().sleep(500);
+                                }
+                            catch(Exception e){};
                             choiceMade(current_line);
                             break;
                     case "repeat":  
@@ -634,8 +642,13 @@ public class World extends JPanel
                                     // If we can't find an accompanying Else
                                     if (else_line >= max_line_count)
                                     {
-                                        return line_count;
+                                        break;
                                     }
+                                }
+                                if (else_line >= max_line_count)
+                                {
+                                    ++line_count;
+                                    break;
                                 }
                                 // End check for accompanying Else
                                
