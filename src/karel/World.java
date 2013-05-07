@@ -628,5 +628,28 @@ public class World extends JPanel
         {
             Speed = newSpeed;
         }
+        
+        public void setThemes(String newTheme)
+        {
+            for(int loop = 0; loop<gems.size(); loop++)
+            {
+                Gem temp = (Gem) gems.get(loop);
+                temp.setNewImage(newTheme+"Gem.png");
+            }
+            
+            for(int loop = 0; loop<walls.size(); loop++)
+            {
+                Wall temp = (Wall) walls.get(loop);
+                temp.setNewImage(newTheme+"Wall.png");
+            }
+            
+            for(int loop = 0; loop<areas.size(); loop++)
+            {
+                Area temp = (Area) areas.get(loop);
+                temp.setNewImage(newTheme+"Area.png");
+            }
+            
+            Home.setNewImage(newTheme+"Home.png");
+        }
 
 }
