@@ -10,6 +10,7 @@ public class Player extends Entity
     char direction; //karels icon ^ > < v
     
     private int gemBag; //how many gems karel is holding
+    private ArrayList Bag = new ArrayList();
     private int StepCounter;
     
     public Player(int x, int y) 
