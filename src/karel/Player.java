@@ -9,13 +9,14 @@ public class Player extends Entity
 {
     char direction; //karels icon ^ > < v
     
-    private int gemBag; //how many gems karel is holding
+    private ArrayList Bag = new ArrayList();
+    Gem tempGem;
     private int StepCounter;
     
     public Player(int x, int y) 
     {
         super(x, y);
-        StepCounter = 1;
+        StepCounter = 0;
         direction ='^';
 
         URL loc = this.getClass().getResource("up.png");
@@ -43,18 +44,22 @@ public class Player extends Entity
         StepCounter++;
     }
     
-    public void addGem()
+    public void addGem(Gem gem)
     {
-        this.gemBag++;
+        gem.SetX(0);
+        gem.SetY(0);
+        this.Bag.add(gem);
     }
     
-    public void removeGem()
+    public Gem removeGem()
     {
-        this.gemBag--;
+        tempGem = (Gem) Bag.get(0);
+        this.Bag.remove(0);
+        return tempGem;
     }
     public int getGemCount()
     {
-        return this.gemBag;
+        return this.Bag.size();
     }
     
     

@@ -26,6 +26,7 @@ public class World extends JPanel
     private int w = 18;
     private int h = 14;
     private home Home;
+    private Gem tempGem;
     JTextArea lines;
     JTextArea jta;
     int Speed = 5;
@@ -156,8 +157,9 @@ public class World extends JPanel
         world.addAll(walls);
         world.addAll(areas);
         world.addAll(gems);
-        world.add(karel);
         world.add(Home);
+        world.add(karel);
+
         
         for (int i = 0; i < areas.size(); i++)
         {
@@ -261,18 +263,25 @@ public class World extends JPanel
                 //if the gem is on the same space as karel
                 if (karel.isGemCollision(karel.GetX(), karel.GetY(), gems) != -1)
                 {
-                    //pick up the gem
-                    gems.remove(karel.isGemCollision(karel.GetX(), karel.GetY(), gems));
-                    karel.addGem();
+                    //get the array location of this gem
+                    int gemLocation = karel.isGemCollision(karel.GetX(), karel.GetY(), gems);
+                    tempGem = (Gem) gems.get(gemLocation); 
+                   
+                    //put in karels bag
+                    karel.addGem(tempGem);
+                    
+                    //remove from world
+                    gems.remove(gemLocation);
                 }
                 break;
             case "put":
-                //pick up the gem
+                //drop gem from gem bag
                 if(karel.getGemCount() > 0)
                 {
-                    karel.removeGem();
-                    Gem gem = new Gem(karel.GetX(),karel.GetY());
-                    gems.add(gem);
+                    tempGem = karel.removeGem();
+                    tempGem.SetX(karel.GetX());
+                    tempGem.SetY(karel.GetY());
+                    gems.add(tempGem);
                 }
                 break;
             case "manual":
@@ -627,6 +636,29 @@ public class World extends JPanel
         public void setSpeed(int newSpeed)
         {
             Speed = newSpeed;
+        }
+        
+        public void setThemes(String newTheme)
+        {
+            for(int loop = 0; loop<gems.size(); loop++)
+            {
+                Gem temp = (Gem) gems.get(loop);
+                temp.setNewImage(newTheme+"Gem.png");
+            }
+            
+            for(int loop = 0; loop<walls.size(); loop++)
+            {
+                Wall temp = (Wall) walls.get(loop);
+                temp.setNewImage(newTheme+"Wall.png");
+            }
+            
+            for(int loop = 0; loop<areas.size(); loop++)
+            {
+                Area temp = (Area) areas.get(loop);
+                temp.setNewImage(newTheme+"Area.png");
+            }
+            
+            Home.setNewImage(newTheme+"Home.png");
         }
 
 }

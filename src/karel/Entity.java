@@ -1,6 +1,8 @@
 package karel;
 import java.awt.Image;
+import java.net.URL;
 import java.util.*;
+import javax.swing.ImageIcon;
 //Primary class for all objects that will appear in world
 
 public class Entity 
@@ -99,4 +101,13 @@ public class Entity
         
         return false;
     }
+    
+    public void setNewImage(String newImage)
+    {
+        URL loc = this.getClass().getResource(newImage);
+        ImageIcon iia = new ImageIcon(loc);
+        Image image = iia.getImage();
+        this.setImage(image);        
+    }
+    
 }
