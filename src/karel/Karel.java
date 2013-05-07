@@ -33,11 +33,13 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
+import javax.swing.JButton;
+import javax.swing.Timer;
 import java.lang.*;
 
 /**
  *
- * @author Sam, Amber
+ * @author Sam, Amber, Josh, Noel, Heather
  */
 public class Karel extends javax.swing.JFrame
 {
@@ -46,6 +48,8 @@ public class Karel extends javax.swing.JFrame
     JTextArea lines;
     JTextArea textarea;
     JFrame textframe;
+    Thread loop;
+    int currSpeed = 5;
     /**
      * Creates new form Karel
      */
@@ -53,14 +57,25 @@ public class Karel extends javax.swing.JFrame
     {
         this.setTitle("Karel");
         initComponents();
-        manualPanel.setVisible(false);
-        buttonPanel.setVisible(true);
         InitUI();
-        
+        Timer Gemupdater = new Timer(100, new ActionListener()
+        {
+          @Override
+          public void actionPerformed(ActionEvent evt)
+          {
+              StepCount.setText("" + world.getStepCount());
+              GemCount.setText("" + world.getPlayerGem());
+          }
+        });
+        Gemupdater.start();
+        loop = new Thread();
     }
     
     public void InitUI() 
     {
+        buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
+        blankPanel.setVisible(true);
         // Creating the popout frame with line numbering
         textframe = new JFrame("Programmer Mode");
         // Building Menu
@@ -127,7 +142,7 @@ public class Karel extends javax.swing.JFrame
 
         textframe.add(textpane);
         textframe.pack();
-        textframe.setSize(500,500);
+        textframe.setSize(390,540);
         textframe.setVisible(false);
         lines.setBackground(Color.LIGHT_GRAY);
         lines.setEditable(false);
@@ -136,15 +151,19 @@ public class Karel extends javax.swing.JFrame
                @Override
                public void actionPerformed(java.awt.event.ActionEvent e)
                {
-                        final List<String> user_input = Arrays.asList(textarea.getText().split("\n"));
-                        Thread loop;
+                        textframe.setVisible(false);
+                        buttonPanel.setVisible(false);
+                        manualPanel.setVisible(true);
+                        final List<String> user_input = Arrays.asList(textarea.getText().split("\n"));                       
                         Runnable r1 = new Runnable()
                         {
                              public void run()
                              {
                                   int line_count = world.doScript(0, 0, user_input); // Running
-
-                              }
+                                  buttonPanel.setVisible(false);
+                                  manualPanel.setVisible(false);
+                                  textframe.setVisible(false);
+                             }
                          };
                          loop = new Thread(r1);
                          loop.start();
@@ -228,8 +247,7 @@ public class Karel extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         mainContainer = new javax.swing.JPanel();
         topSubContainer = new javax.swing.JPanel();
@@ -249,10 +267,13 @@ public class Karel extends javax.swing.JFrame
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         manualPanel = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        Slowdown = new javax.swing.JButton();
+        Pause = new javax.swing.JButton();
+        Speedup = new javax.swing.JButton();
+        speedCounter = new javax.swing.JTextField();
+        Stop = new javax.swing.JButton();
+        Reset = new javax.swing.JButton();
+        blankPanel = new javax.swing.JPanel();
         rightContainer = new javax.swing.JPanel();
         world = new karel.World();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -277,19 +298,15 @@ public class Karel extends javax.swing.JFrame
         topSubContainer.setPreferredSize(new java.awt.Dimension(733, 28));
 
         jButton3.setText("Button Mode");
-        jButton3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
         jButton10.setText("Manual Mode");
-        jButton10.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
             }
         });
@@ -367,46 +384,36 @@ public class Karel extends javax.swing.JFrame
         buttonPanel.setVisible(false);
 
         jButton4.setText("Go");
-        jButton4.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
         jButton5.setText("Left");
-        jButton5.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
 
         jButton6.setText("Right");
-        jButton6.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
 
         jButton8.setText("Get");
-        jButton8.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
             }
         });
 
         jButton9.setText("Put");
-        jButton9.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton9ActionPerformed(evt);
             }
         });
@@ -453,37 +460,104 @@ public class Karel extends javax.swing.JFrame
 
         leftContainer.add(buttonPanel, "card2");
 
-        manualPanel.setLayout(new java.awt.BorderLayout());
+        Slowdown.setText("Slowdown");
+        Slowdown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Slowdown(evt);
+            }
+        });
 
-        jLabel1.setText("Some BS here about welcome to karel or map info etc.");
+        Pause.setText("Pause");
+        Pause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Pause(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        Speedup.setText("Speedup");
+        Speedup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Speedup(evt);
+            }
+        });
+
+        speedCounter.setBackground(new java.awt.Color(204, 204, 204));
+        speedCounter.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        speedCounter.setText("Speed:        " + currSpeed);
+
+        Stop.setText("Stop");
+        Stop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Stop(evt);
+            }
+        });
+
+        Reset.setText("Reset");
+        Reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Reset(evt);
+            }
+        });
+
+        javax.swing.GroupLayout manualPanelLayout = new javax.swing.GroupLayout(manualPanel);
+        manualPanel.setLayout(manualPanelLayout);
+        manualPanelLayout.setHorizontalGroup(
+            manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manualPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(130, 130, 130))
+            .addGroup(manualPanelLayout.createSequentialGroup()
                 .addGap(47, 47, 47)
-                .addComponent(jLabel1)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(manualPanelLayout.createSequentialGroup()
+                        .addComponent(Slowdown)
+                        .addGap(49, 49, 49))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manualPanelLayout.createSequentialGroup()
+                        .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)))
+                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(manualPanelLayout.createSequentialGroup()
+                        .addComponent(Pause)
+                        .addGap(56, 56, 56)
+                        .addComponent(Speedup)
+                        .addContainerGap(26, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manualPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78))))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel1)
-                .addContainerGap(57, Short.MAX_VALUE))
+        manualPanelLayout.setVerticalGroup(
+            manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(manualPanelLayout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Slowdown)
+                    .addComponent(Pause)
+                    .addComponent(Speedup))
+                .addGap(37, 37, 37)
+                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(188, Short.MAX_VALUE))
         );
-
-        manualPanel.add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Manual Programmer text box\n\nChange the name of this textbox so its not \n\n\n\n\nso\n\n\n\n\ngeneric\n\nand\n\ntesting\nthe\nscroll\nbar\ndoes\nit\nwork\nor\ndoes\nit\nsuck");
-        jScrollPane1.setViewportView(jTextArea1);
-
-        manualPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         leftContainer.add(manualPanel, "card3");
+
+        javax.swing.GroupLayout blankPanelLayout = new javax.swing.GroupLayout(blankPanel);
+        blankPanel.setLayout(blankPanelLayout);
+        blankPanelLayout.setHorizontalGroup(
+            blankPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 395, Short.MAX_VALUE)
+        );
+        blankPanelLayout.setVerticalGroup(
+            blankPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 465, Short.MAX_VALUE)
+        );
+
+        leftContainer.add(blankPanel, "card4");
 
         middleContainer.add(leftContainer, java.awt.BorderLayout.LINE_START);
 
@@ -511,20 +585,16 @@ public class Karel extends javax.swing.JFrame
         jMenu1.setText("File");
 
         jMenuItem2.setText("Open New Map From File");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
             }
         });
         jMenu1.add(jMenuItem2);
 
         jMenuItem1.setText("Reset Current Map");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
             }
         });
@@ -535,10 +605,8 @@ public class Karel extends javax.swing.JFrame
         jMenu2.setText("Help");
 
         jMenuItem3.setText("Open Help File (.txt)");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
             }
         });
@@ -565,14 +633,15 @@ public class Karel extends javax.swing.JFrame
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton3ActionPerformed
     {//GEN-HEADEREND:event_jButton3ActionPerformed
         manualPanel.setVisible(false);
+        textframe.setVisible(false);
+        loop.stop();
         buttonPanel.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton4ActionPerformed
     {//GEN-HEADEREND:event_jButton4ActionPerformed
         world.choiceMade("go");
-        StepCount.setText("" + world.getStepCount());
-        buttonPanel.setVisible(false);
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton5ActionPerformed
@@ -590,18 +659,19 @@ public class Karel extends javax.swing.JFrame
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton8ActionPerformed
     {//GEN-HEADEREND:event_jButton8ActionPerformed
         world.choiceMade("get");
-        GemCount.setText("" + world.getPlayerGem());
+//        GemCount.setText("" + world.getPlayerGem());
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton9ActionPerformed
     {//GEN-HEADEREND:event_jButton9ActionPerformed
         world.choiceMade("put");
-        GemCount.setText("" + world.getPlayerGem());
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton10ActionPerformed
     {//GEN-HEADEREND:event_jButton10ActionPerformed
         buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
+        loop.stop();
         textframe.setVisible(true);
     }//GEN-LAST:event_jButton10ActionPerformed
 
@@ -618,6 +688,9 @@ public class Karel extends javax.swing.JFrame
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         // get a file path from the user
+        loop.stop();
+        buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Please Specify the File To Open");
         File fileToOpen;
@@ -656,12 +729,65 @@ public class Karel extends javax.swing.JFrame
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
+        loop.stop();
+        buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
         world.worldDeleter();
         world.initWorld();
 
         //paint
         this.repaint();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void Pause(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Pause
+        Object source = evt.getSource();
+        JButton switcher;
+        switcher = (JButton) source;
+        if (switcher.getText().equals("Pause"))
+        {
+            loop.suspend();
+            switcher.setText("Resume");
+        }
+        else if (switcher.getText().equals("Resume"))
+        {
+            loop.resume();
+            switcher.setText("Pause");
+        }
+    }//GEN-LAST:event_Pause
+
+    private void Slowdown(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Slowdown
+        if (currSpeed > 1)
+        {
+            --currSpeed;
+            world.setSpeed(currSpeed);
+            speedCounter.setText("Speed:        " + currSpeed);
+        }
+    }//GEN-LAST:event_Slowdown
+
+    private void Speedup(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Speedup
+        if (currSpeed < 10)
+        {
+            ++currSpeed;
+            world.setSpeed(currSpeed);
+            speedCounter.setText("Speed:        " + currSpeed);
+        }
+    }//GEN-LAST:event_Speedup
+
+    private void Reset(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reset
+        loop.stop();
+        world.worldDeleter();
+        world.initWorld();
+        buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
+        //paint
+        this.repaint();
+    }//GEN-LAST:event_Reset
+
+    private void Stop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Stop
+        loop.stop();
+        buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
+    }//GEN-LAST:event_Stop
 
     /**
      * @param args the command line arguments
@@ -710,7 +836,13 @@ public class Karel extends javax.swing.JFrame
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel GemCount;
+    private javax.swing.JButton Pause;
+    private javax.swing.JButton Reset;
+    private javax.swing.JButton Slowdown;
+    private javax.swing.JButton Speedup;
     private javax.swing.JLabel StepCount;
+    private javax.swing.JButton Stop;
+    private javax.swing.JPanel blankPanel;
     private javax.swing.JPanel bottomSubContainer;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton jButton10;
@@ -720,7 +852,6 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
@@ -729,14 +860,12 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JPanel leftContainer;
     private javax.swing.JPanel mainContainer;
     private javax.swing.JPanel manualPanel;
     private javax.swing.JPanel middleContainer;
     private javax.swing.JPanel rightContainer;
+    private javax.swing.JTextField speedCounter;
     private javax.swing.JPanel topSubContainer;
     private karel.World world;
     // End of variables declaration//GEN-END:variables

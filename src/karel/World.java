@@ -28,6 +28,7 @@ public class World extends JPanel
     private home Home;
     JTextArea lines;
     JTextArea jta;
+    int Speed = 5;
     
     //Map
     private String level =
@@ -277,6 +278,7 @@ public class World extends JPanel
             case "manual":
                 break;
         }
+        karel.addStep();
         this.repaint();
     }
     
@@ -293,11 +295,7 @@ public class World extends JPanel
         int newX = x + karel.GetX();
         int newY = y + karel.GetY();
 
-        if (karel.isWallCollision(newX, newY, walls))
-        {
-            //collided with wall - do not move karel
-        }
-        else if (karel.isHomeCollision(newX,newY,Home))
+        if (karel.isHomeCollision(karel.GetX(),karel.GetY(),Home))
         {
             //if karel is home and all gems are taken, move and end game
             if(gems.isEmpty())
@@ -306,6 +304,10 @@ public class World extends JPanel
                 isRunning = false;
                 infoBox("You have won!", "Congratulations!");
             }
+        }
+        if (karel.isWallCollision(newX, newY, walls))
+        {
+            //collided with wall - do not move karel
         }
         else
         {
@@ -402,7 +404,7 @@ public class World extends JPanel
                     case "get"  :
                            try 
                            {
-                               Thread.currentThread().sleep(500);
+                               Thread.currentThread().sleep(2050 - (Speed * 200));
                            }
                            catch(Exception e){}; 
                            choiceMade(current_line);
@@ -622,4 +624,9 @@ public class World extends JPanel
         {
             JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + location, JOptionPane.INFORMATION_MESSAGE);
         }
+        public void setSpeed(int newSpeed)
+        {
+            Speed = newSpeed;
+        }
+
 }
