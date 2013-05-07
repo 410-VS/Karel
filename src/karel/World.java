@@ -156,8 +156,9 @@ public class World extends JPanel
         world.addAll(walls);
         world.addAll(areas);
         world.addAll(gems);
-        world.add(karel);
         world.add(Home);
+        world.add(karel);
+
         
         for (int i = 0; i < areas.size(); i++)
         {
