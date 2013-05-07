@@ -15,7 +15,7 @@ public class Player extends Entity
     public Player(int x, int y) 
     {
         super(x, y);
-        StepCounter = 1;
+        StepCounter = 0;
         direction ='^';
 
         URL loc = this.getClass().getResource("up.png");

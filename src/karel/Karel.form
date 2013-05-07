@@ -410,7 +410,6 @@
                                       <EmptySpace pref="26" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="Reset" min="-2" pref="86" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
                                   </Group>
