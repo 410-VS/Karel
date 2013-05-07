@@ -283,6 +283,7 @@ public class Karel extends javax.swing.JFrame
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1006, 550));
@@ -612,6 +613,14 @@ public class Karel extends javax.swing.JFrame
         });
         jMenu2.add(jMenuItem3);
 
+        jMenuItem4.setText("Open Help File (.html)");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -789,6 +798,15 @@ public class Karel extends javax.swing.JFrame
         manualPanel.setVisible(false);
     }//GEN-LAST:event_Stop
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        Desktop dt = Desktop.getDesktop();
+        try
+        {
+            dt.open( new File("help.html") );
+        } catch (IOException e) {//exception handling?
+            }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -860,6 +878,7 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel leftContainer;
     private javax.swing.JPanel mainContainer;
     private javax.swing.JPanel manualPanel;
