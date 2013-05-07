@@ -40,6 +40,7 @@ import java.lang.*;
 /**
  *
  * @author Sam, Amber, Josh, Noel, Heather
+ * Github sucks!
  */
 public class Karel extends javax.swing.JFrame
 {
