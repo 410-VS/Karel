@@ -35,7 +35,12 @@ public class Player extends Entity
     
     public int getSteps()
     {
-        return this.StepCounter++;
+        return this.StepCounter;
+    }
+    
+    public void addStep()
+    {
+        StepCounter++;
     }
     
     public void addGem()
