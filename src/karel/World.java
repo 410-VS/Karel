@@ -279,7 +279,6 @@ public class World extends JPanel
                 if(karel.getGemCount() > 0)
                 {
                     tempGem = karel.removeGem();
-                    //Gem gem = new Gem(karel.GetX(),karel.GetY());
                     tempGem.SetX(karel.GetX());
                     tempGem.SetY(karel.GetY());
                     gems.add(tempGem);
