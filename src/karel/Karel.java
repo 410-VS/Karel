@@ -637,8 +637,10 @@ public class Karel extends javax.swing.JFrame
         jMenu3.setText("Themes");
 
         jMenuItem5.setText("MegaMan");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItem5ActionPerformed(evt);
             }
         });
