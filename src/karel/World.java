@@ -26,6 +26,7 @@ public class World extends JPanel
     private int w = 18;
     private int h = 14;
     private home Home;
+    private Gem tempGem;
     JTextArea lines;
     JTextArea jta;
     int Speed = 5;
@@ -262,18 +263,26 @@ public class World extends JPanel
                 //if the gem is on the same space as karel
                 if (karel.isGemCollision(karel.GetX(), karel.GetY(), gems) != -1)
                 {
-                    //pick up the gem
-                    gems.remove(karel.isGemCollision(karel.GetX(), karel.GetY(), gems));
-                    karel.addGem();
+                    //get the array location of this gem
+                    int gemLocation = karel.isGemCollision(karel.GetX(), karel.GetY(), gems);
+                    tempGem = (Gem) gems.get(gemLocation); 
+                   
+                    //put in karels bag
+                    karel.addGem(tempGem);
+                    
+                    //remove from world
+                    gems.remove(gemLocation);
                 }
                 break;
             case "put":
-                //pick up the gem
+                //drop gem from gem bag
                 if(karel.getGemCount() > 0)
                 {
-                    karel.removeGem();
-                    Gem gem = new Gem(karel.GetX(),karel.GetY());
-                    gems.add(gem);
+                    tempGem = karel.removeGem();
+                    //Gem gem = new Gem(karel.GetX(),karel.GetY());
+                    tempGem.SetX(karel.GetX());
+                    tempGem.SetY(karel.GetY());
+                    gems.add(tempGem);
                 }
                 break;
             case "manual":
