@@ -18,4 +18,6 @@ public class Gem extends Entity
         Image image = iia.getImage();
         this.setImage(image);
     }
+    
+
 }
