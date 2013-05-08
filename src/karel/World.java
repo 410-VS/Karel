@@ -194,8 +194,9 @@ public class World extends JPanel
         buildWorld(g);
     }
     
-    public void choiceMade(String choice)
+    public boolean choiceMade(String choice)
     {    
+        boolean error = false;
         //Get karels current direction
         char direction = karel.GetDirection();
         switch (choice)
@@ -204,16 +205,16 @@ public class World extends JPanel
                 switch(direction)
                 {
                     case '^':
-                        handleMove(0,-SPACE);
+                        error = handleMove(0,-SPACE);
                         break;
                     case 'v':
-                        handleMove(0, SPACE);
+                        error = handleMove(0, SPACE);
                         break;
                     case '>':
-                        handleMove(SPACE,0);
+                        error = handleMove(SPACE,0);
                         break;
                     case '<':
-                        handleMove(-SPACE,0);
+                        error = handleMove(-SPACE,0);
                         break;
                 }
                 break;
@@ -289,6 +290,7 @@ public class World extends JPanel
         }
         karel.addStep();
         this.repaint();
+        return error;
     }
     
     public void worldDeleter()
@@ -298,7 +300,7 @@ public class World extends JPanel
         areas.clear();
     }
      
-    public void handleMove(int x, int y)
+    public boolean handleMove(int x, int y)
     {
         //Get where karel wants to move
         int newX = x + karel.GetX();
@@ -317,12 +319,14 @@ public class World extends JPanel
         if (karel.isWallCollision(newX, newY, walls))
         {
             //collided with wall - do not move karel
+            return true; // returning an error
         }
         else
         {
             //move karel
             karel.move(x, y);
         }
+        return false; // no error
     }              
             
         public int doScript(int line_count, int scope, List<String> user_input)
@@ -416,7 +420,12 @@ public class World extends JPanel
                                Thread.currentThread().sleep(2050 - (Speed * 200));
                            }
                            catch(Exception e){}; 
-                           choiceMade(current_line);
+                           boolean error = choiceMade(current_line);
+                           if (error)
+                           {
+                               infoBox("Karel has crashed into a wall!", "ERROR");
+                               return throw_error;                              
+                           }
                            break;
                     case "repeat":  
                             // Checking if the repeat integer is out of range 
