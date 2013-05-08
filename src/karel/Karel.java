@@ -4,6 +4,9 @@
  */
 package karel;
 
+import javax.imageio.ImageIO;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import java.awt.Font;
 import java.awt.Dimension;
 import javax.swing.JInternalFrame;
@@ -77,6 +80,36 @@ public class Karel extends javax.swing.JFrame
     
     public void InitUI() 
     {
+        try {
+             Image img = ImageIO.read(getClass().getResource("stop.png"));
+             Stop.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("pause.png"));
+             Pause.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("slower.png"));
+             Slowdown.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("faster.png"));
+             Speedup.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("go.png"));
+             jButton4.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("right.png"));
+             jButton6.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("left.png"));
+             jButton5.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        Pause.setText("Pause");
+        Pause.setFont(new Font("Arial", Font.PLAIN, 0));
         buttonPanel.setVisible(true);
         manualPanel.setVisible(false);
         blankPanel.setVisible(true);
@@ -260,7 +293,6 @@ public class Karel extends javax.swing.JFrame
         jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1021, 546));
         setPreferredSize(new java.awt.Dimension(990, 545));
         setResizable(false);
 
@@ -280,7 +312,7 @@ public class Karel extends javax.swing.JFrame
             }
         });
 
-        jButton10.setText("Manual Mode");
+        jButton10.setText("Programmer Mode");
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
@@ -304,7 +336,7 @@ public class Karel extends javax.swing.JFrame
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 607, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(StepCount)
@@ -337,7 +369,7 @@ public class Karel extends javax.swing.JFrame
         bottomSubContainer.setLayout(bottomSubContainerLayout);
         bottomSubContainerLayout.setHorizontalGroup(
             bottomSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1019, Short.MAX_VALUE)
+            .addGap(0, 905, Short.MAX_VALUE)
         );
         bottomSubContainerLayout.setVerticalGroup(
             bottomSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,21 +392,18 @@ public class Karel extends javax.swing.JFrame
         buttonPanel.setVisible(false);
         buttonPanel.setPreferredSize(new java.awt.Dimension(395, 440));
 
-        jButton4.setText("Go");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Left");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
 
-        jButton6.setText("Right");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -400,58 +429,53 @@ public class Karel extends javax.swing.JFrame
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(84, 84, 84)
+                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jButton4)
                     .addGroup(buttonPanelLayout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(jButton5)
-                        .addGap(71, 71, 71)
-                        .addComponent(jButton6))
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(buttonPanelLayout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addComponent(jButton4))
-                    .addGroup(buttonPanelLayout.createSequentialGroup()
-                        .addGap(80, 80, 80)
                         .addComponent(jButton8)
-                        .addGap(41, 41, 41)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton9)))
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
-        buttonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jButton5, jButton6, jButton8, jButton9});
+        buttonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton5, jButton6, jButton8, jButton9});
 
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                .addGap(100, 100, 100)
+                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(buttonPanelLayout.createSequentialGroup()
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))
+                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8)
                     .addComponent(jButton9))
-                .addContainerGap(290, Short.MAX_VALUE))
+                .addContainerGap(186, Short.MAX_VALUE))
         );
 
         leftContainer.add(buttonPanel, "card2");
 
-        Slowdown.setText("Slowdown");
         Slowdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Slowdown(evt);
             }
         });
 
-        Pause.setText("Pause");
         Pause.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Pause(evt);
             }
         });
 
-        Speedup.setText("Speedup");
         Speedup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Speedup(evt);
@@ -462,7 +486,6 @@ public class Karel extends javax.swing.JFrame
         speedCounter.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         speedCounter.setText("Speed:        " + currSpeed);
 
-        Stop.setText("Stop");
         Stop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Stop(evt);
@@ -481,43 +504,40 @@ public class Karel extends javax.swing.JFrame
         manualPanelLayout.setHorizontalGroup(
             manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manualPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(130, 130, 130))
-            .addGroup(manualPanelLayout.createSequentialGroup()
-                .addGap(47, 47, 47)
+                .addContainerGap(131, Short.MAX_VALUE)
                 .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(manualPanelLayout.createSequentialGroup()
-                        .addComponent(Slowdown)
-                        .addGap(49, 49, 49))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manualPanelLayout.createSequentialGroup()
-                        .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)))
-                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(manualPanelLayout.createSequentialGroup()
-                        .addComponent(Pause)
-                        .addGap(56, 56, 56)
-                        .addComponent(Speedup)
-                        .addContainerGap(26, Short.MAX_VALUE))
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(Slowdown, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Pause, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Speedup, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(96, 96, 96))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manualPanelLayout.createSequentialGroup()
-                        .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78))))
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(speedCounter)
+                            .addComponent(Reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(130, 130, 130))))
         );
         manualPanelLayout.setVerticalGroup(
             manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(manualPanelLayout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Slowdown)
-                    .addComponent(Pause)
-                    .addComponent(Speedup))
-                .addGap(37, 37, 37)
-                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE)
+                .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(manualPanelLayout.createSequentialGroup()
+                        .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Slowdown, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Speedup, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(Pause, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         leftContainer.add(manualPanel, "card3");
@@ -548,7 +568,7 @@ public class Karel extends javax.swing.JFrame
         world.setLayout(worldLayout);
         worldLayout.setHorizontalGroup(
             worldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 624, Short.MAX_VALUE)
+            .addGap(0, 588, Short.MAX_VALUE)
         );
         worldLayout.setVerticalGroup(
             worldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -645,14 +665,6 @@ public class Karel extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton3ActionPerformed
-    {//GEN-HEADEREND:event_jButton3ActionPerformed
-        manualPanel.setVisible(false);
-        programmerFrame.setVisible(false);
-        programmerThread.stop();
-        buttonPanel.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton4ActionPerformed
     {//GEN-HEADEREND:event_jButton4ActionPerformed
         world.choiceMade("go");
@@ -681,14 +693,6 @@ public class Karel extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jButton9ActionPerformed
         world.choiceMade("put");
     }//GEN-LAST:event_jButton9ActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton10ActionPerformed
-    {//GEN-HEADEREND:event_jButton10ActionPerformed
-        buttonPanel.setVisible(false);
-        manualPanel.setVisible(false);
-        programmerThread.stop();
-        programmerFrame.setVisible(true);
-    }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
     //Open help file (write help file...)
@@ -762,11 +766,19 @@ public class Karel extends javax.swing.JFrame
         {
             programmerThread.suspend();
             switcher.setText("Resume");
+            try {
+             Image img = ImageIO.read(getClass().getResource("play.png"));
+             switcher.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
         }
         else if (switcher.getText().equals("Resume"))
         {
             programmerThread.resume();
             switcher.setText("Pause");
+            try {
+             Image img = ImageIO.read(getClass().getResource("pause.png"));
+             switcher.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
         }
     }//GEN-LAST:event_Pause
 
@@ -833,6 +845,20 @@ public class Karel extends javax.swing.JFrame
         this.repaint();
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
+        programmerThread.stop();
+        programmerFrame.setVisible(true);
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        manualPanel.setVisible(false);
+        programmerFrame.setVisible(false);
+        programmerThread.stop();
+        buttonPanel.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     private void programmerRunButton(java.awt.event.ActionEvent evt)
     {
         programmerFrame.setVisible(false);
@@ -841,6 +867,11 @@ public class Karel extends javax.swing.JFrame
         currSpeed = 5;
         world.setSpeed(currSpeed);
         speedCounter.setText("Speed:        " + currSpeed);
+        Pause.setText("Pause");
+        try {
+         Image img = ImageIO.read(getClass().getResource("pause.png"));
+         Pause.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {}
         programmerThread.stop();
         final List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));                       
         Runnable r1 = new Runnable()
