@@ -84,25 +84,30 @@ public class Karel extends javax.swing.JFrame
         programmerFrame = new JInternalFrame("Programmer Mode");
         // Building Menu
         JMenuBar textbar;
-        JMenu textmenu;
-        JMenuItem menuSave, menuSaveAs;
+        JButton menuSave, menuSaveAs;
         JButton menuRun;
         textbar = new JMenuBar();
-        textmenu = new JMenu("File");
-        textmenu.setMnemonic(KeyEvent.VK_A);
-        textbar.add(textmenu);
         menuRun = new JButton("Run");
         menuRun.setFont(new Font("Arial", Font.PLAIN, 10));
-        menuRun.setMinimumSize(new Dimension(50, 25));  
-        menuRun.setPreferredSize(new Dimension(50, 25));
-        menuRun.setMaximumSize(new Dimension(50, 25));
+        menuRun.setMinimumSize(new Dimension(75, 25));  
+        menuRun.setPreferredSize(new Dimension(75, 25));
+        menuRun.setMaximumSize(new Dimension(75, 25));
         textbar.add(menuRun);
 
-        menuSaveAs = new JMenuItem("Auto Save");
-        textmenu.add(menuSaveAs);
+        menuSaveAs = new JButton("Auto Save");
+        menuSaveAs.setFont(new Font("Arial", Font.PLAIN, 10));
+        menuSaveAs.setMinimumSize(new Dimension(90, 25));  
+        menuSaveAs.setPreferredSize(new Dimension(90, 25));
+        menuSaveAs.setMaximumSize(new Dimension(90, 25));
+        textbar.add(menuSaveAs);
 
-        menuSave = new JMenuItem("Save As");
-        textmenu.add(menuSave);
+        menuSave = new JButton("Save As");
+        menuSave.setFont(new Font("Arial", Font.PLAIN, 10));
+        menuSave.setMinimumSize(new Dimension(75, 25));  
+        menuSave.setPreferredSize(new Dimension(75, 25));
+        menuSave.setMaximumSize(new Dimension(75, 25));
+        
+        textbar.add(menuSave);
 
 
         // Creating the JTextArea's
