@@ -19,5 +19,13 @@ public class Gem extends Entity
         this.setImage(image);
     }
     
-
+    public void setX(int newX)
+    {
+        this.x = newX;
+    }
+    
+    public void setY(int newY)
+    {
+        this.y = newY;
+    }
 }
