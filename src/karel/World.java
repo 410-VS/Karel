@@ -306,17 +306,7 @@ public class World extends JPanel
         //Get where karel wants to move
         int newX = x + karel.GetX();
         int newY = y + karel.GetY();
-
-        if (karel.isHomeCollision(karel.GetX(),karel.GetY(),Home))
-        {
-            //if karel is home and all gems are taken, move and end game
-            if(gems.isEmpty())
-            {
-                karel.move(x,y);
-                isRunning = false;
-                infoBox("You have won!", "Congratulations!");
-            }
-        }
+        
         if (karel.isWallCollision(newX, newY, walls))
         {
             //collided with wall - do not move karel
@@ -326,6 +316,18 @@ public class World extends JPanel
         {
             //move karel
             karel.move(x, y);
+        }
+        repaint();
+        if (karel.isHomeCollision(karel.GetX(),karel.GetY(),Home))
+        {
+            //if karel is home and all gems are taken, move and end game
+            if(gems.isEmpty())
+            {
+                isRunning = false;
+                infoBox("You have won!", "Congratulations!");
+                worldDeleter();
+                initWorld();
+            }
         }
         return false; // no error
     }              
@@ -371,12 +373,13 @@ public class World extends JPanel
                         {
                             current_line = current_line.substring(1); // Removing the tab
                         }
-                    }
-                    if (current_line.startsWith("\t"))
-                    {
-                        ++line_count;
-                        continue;
-                    }
+                    }                    
+                }
+                // if the current line is out of scope
+                if (current_line.startsWith("\t"))
+                {
+                    ++line_count;
+                    continue;
                 }
                 current_line = current_line.trim();
                 
@@ -418,7 +421,7 @@ public class World extends JPanel
                     case "get"  :
                            try 
                            {
-                               Thread.currentThread().sleep(2050 - (Speed * 200));
+                               Thread.currentThread().sleep((3000/Speed) - 290);
                            }
                            catch(Exception e){}; 
                            boolean error = choiceMade(current_line);

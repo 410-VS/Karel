@@ -4,6 +4,12 @@
  */
 package karel;
 
+import javax.imageio.ImageIO;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import java.awt.Font;
+import java.awt.Dimension;
+import javax.swing.JInternalFrame;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
@@ -47,9 +53,9 @@ public class Karel extends javax.swing.JFrame
     private final int OFFSET = 0;
     
     JTextArea lines;
-    JTextArea textarea;
-    JFrame textframe;
-    Thread loop;
+    JTextArea programmerText;
+    JInternalFrame programmerFrame;
+    Thread programmerThread;
     int currSpeed = 5;
     /**
      * Creates new form Karel
@@ -69,50 +75,92 @@ public class Karel extends javax.swing.JFrame
           }
         });
         Gemupdater.start();
-        loop = new Thread();
+        programmerThread = new Thread();
     }
     
     public void InitUI() 
     {
-        buttonPanel.setVisible(false);
+        try {
+             Image img = ImageIO.read(getClass().getResource("stop.png"));
+             Stop.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("pause.png"));
+             Pause.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("slower.png"));
+             Slowdown.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("faster.png"));
+             Speedup.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("go.png"));
+             jButton4.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("right.png"));
+             jButton6.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        try {
+             Image img = ImageIO.read(getClass().getResource("left.png"));
+             jButton5.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
+        Pause.setText("Pause");
+        Pause.setFont(new Font("Arial", Font.PLAIN, 0));
+        buttonPanel.setVisible(true);
         manualPanel.setVisible(false);
         blankPanel.setVisible(true);
         // Creating the popout frame with line numbering
-        textframe = new JFrame("Programmer Mode");
+        programmerFrame = new JInternalFrame("Programmer Mode");
         // Building Menu
         JMenuBar textbar;
-        JMenu textmenu;
-        JMenuItem menuRun, menuSave, menuSaveAs;
+        JButton menuSave, menuSaveAs, menuLoad;
+        JButton menuRun;
         textbar = new JMenuBar();
-        textmenu = new JMenu("File");
-        textmenu.setMnemonic(KeyEvent.VK_A);
-        textbar.add(textmenu);
-        menuRun = new JMenuItem("Run",
-                                  KeyEvent.VK_T);
-        menuRun.setAccelerator(KeyStroke.getKeyStroke(
-                                    KeyEvent.VK_1, ActionEvent.ALT_MASK));
-        textmenu.add(menuRun);
+        menuRun = new JButton("Run");
+        menuRun.setFont(new Font("Arial", Font.PLAIN, 10));
+        menuRun.setMinimumSize(new Dimension(75, 25));  
+        menuRun.setPreferredSize(new Dimension(75, 25));
+        menuRun.setMaximumSize(new Dimension(75, 25));
+        textbar.add(menuRun);
 
-        menuSaveAs = new JMenuItem("Auto Save");
-        textmenu.add(menuSaveAs);
+        menuSaveAs = new JButton("Auto Save");
+        menuSaveAs.setFont(new Font("Arial", Font.PLAIN, 10));
+        menuSaveAs.setMinimumSize(new Dimension(90, 25));  
+        menuSaveAs.setPreferredSize(new Dimension(90, 25));
+        menuSaveAs.setMaximumSize(new Dimension(90, 25));
+        textbar.add(menuSaveAs);
 
-        menuSave = new JMenuItem("Save As");
-        textmenu.add(menuSave);
-
-
+        menuSave = new JButton("Save As");
+        menuSave.setFont(new Font("Arial", Font.PLAIN, 10));
+        menuSave.setMinimumSize(new Dimension(75, 25));  
+        menuSave.setPreferredSize(new Dimension(75, 25));
+        menuSave.setMaximumSize(new Dimension(75, 25));        
+        textbar.add(menuSave);
+        
+        menuLoad = new JButton("Load");
+        menuLoad.setFont(new Font("Arial", Font.PLAIN, 10));
+        menuLoad.setMinimumSize(new Dimension(75, 25));  
+        menuLoad.setPreferredSize(new Dimension(75, 25));
+        menuLoad.setMaximumSize(new Dimension(75, 25));        
+        textbar.add(menuLoad);
+        
         // Creating the JTextArea's
-        textframe.setJMenuBar(textbar);
-//            textframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        programmerFrame.setJMenuBar(textbar);
+//            programmerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JScrollPane textpane = new JScrollPane();
-        textarea = new JTextArea();
+        programmerText = new JTextArea();
         lines = new JTextArea("1");
         // Listening for input and adding lines
-        textarea.getDocument().addDocumentListener(new DocumentListener()
+        programmerText.getDocument().addDocumentListener(new DocumentListener()
             {
                     public String getText()
                     {
-                            int caretPosition = textarea.getDocument().getLength();
-                            Element root = textarea.getDocument().getDefaultRootElement();
+                            int caretPosition = programmerText.getDocument().getLength();
+                            Element root = programmerText.getDocument().getDefaultRootElement();
                             String text = "1" + System.getProperty("line.separator");
                             for(int i = 2; i < root.getElementIndex( caretPosition ) + 2; i++)
                             {
@@ -137,14 +185,21 @@ public class Karel extends javax.swing.JFrame
 
             });
 
-        textpane.getViewport().add(textarea);
+        textpane.getViewport().add(programmerText);
         textpane.setRowHeaderView(lines);
         textpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        textframe.add(textpane);
-        textframe.pack();
-        textframe.setSize(390,540);
-        textframe.setVisible(false);
+        programmerFrame.add(textpane);
+        programmerFrame.pack();
+        programmerFrame.setSize(390,540);
+        programmerFrame.setVisible(false);
+        blankPanel.add(programmerFrame);
+        // Setting it to fill all of the space in the pane
+        try{programmerFrame.setMaximum(true);}
+        catch(Exception e){};
+        // Removing the title bar of the programmerframe
+        ((javax.swing.plaf.basic.BasicInternalFrameUI)programmerFrame.getUI())
+                                                            .setNorthPane(null);
         lines.setBackground(Color.LIGHT_GRAY);
         lines.setEditable(false);
         menuRun.addActionListener(new ActionListener() 
@@ -152,22 +207,7 @@ public class Karel extends javax.swing.JFrame
                @Override
                public void actionPerformed(java.awt.event.ActionEvent e)
                {
-                        textframe.setVisible(false);
-                        buttonPanel.setVisible(false);
-                        manualPanel.setVisible(true);
-                        final List<String> user_input = Arrays.asList(textarea.getText().split("\n"));                       
-                        Runnable r1 = new Runnable()
-                        {
-                             public void run()
-                             {
-                                  int line_count = world.doScript(0, 0, user_input); // Running
-                                  buttonPanel.setVisible(false);
-                                  manualPanel.setVisible(false);
-                                  textframe.setVisible(false);
-                             }
-                         };
-                         loop = new Thread(r1);
-                         loop.start();
+                        programmerRunButton(e);
                }
 
 
@@ -179,62 +219,25 @@ public class Karel extends javax.swing.JFrame
                @Override
                public void actionPerformed(java.awt.event.ActionEvent e)
                {
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setDialogTitle("Please Enter File Name and Choose Location");
-                    List<String> user_input = Arrays.asList(textarea.getText().split("\n"));
-                    PrintWriter out = null;                      
-
-                    int userSelection = fileChooser.showSaveDialog(fileChooser);
-                    if (userSelection == JFileChooser.APPROVE_OPTION) 
-                    {
-                         try 
-                         {
-                             File fileToSave = fileChooser.getSelectedFile();
-
-                             out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
-                             for(int loop = 0; loop < user_input.size(); loop++)
-                             {
-                                out.println(user_input.get(loop));                                
-                             }
-
-                        out.close();
-                         } catch (FileNotFoundException ex) {
-                             Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
-                         }
-                    }
-
+                    programmerSaveButton(e);                   
                }                       
             });
+        
+        menuLoad.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(java.awt.event.ActionEvent e)
+               {
+                    programmerLoadButton(e);                   
+               }                       
+            });        
 
         menuSaveAs.addActionListener(new ActionListener() 
             {
                @Override
                public void actionPerformed(java.awt.event.ActionEvent e)
                {
-                   try 
-                   {
-                        List<String> user_input = Arrays.asList(textarea.getText().split("\n"));
-                        PrintWriter out;
-                        DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
-                        Date date = new Date();
-
-                        String fileName1;
-                        fileName1 = "KarelCode_";
-                        fileName1 += dateFormat.format(date);
-                        fileName1 += ".txt";
-
-
-                        out = new PrintWriter(fileName1);
-
-                        for(int loop = 0; loop < user_input.size(); loop++)
-                        {
-                           out.println(user_input.get(loop));                                
-                        }
-
-                        out.close();
-                   } catch (FileNotFoundException ex) {
-                       Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
-                   }
+                   programmerAutosaveButton(e);
                }                       
             });      
 
@@ -248,8 +251,7 @@ public class Karel extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         mainContainer = new javax.swing.JPanel();
         topSubContainer = new javax.swing.JPanel();
@@ -285,12 +287,12 @@ public class Karel extends javax.swing.JFrame
         jMenu3 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1021, 546));
         setPreferredSize(new java.awt.Dimension(990, 545));
         setResizable(false);
 
@@ -304,19 +306,15 @@ public class Karel extends javax.swing.JFrame
         topSubContainer.setPreferredSize(new java.awt.Dimension(733, 28));
 
         jButton3.setText("Button Mode");
-        jButton3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jButton10.setText("Manual Mode");
-        jButton10.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton10.setText("Programmer Mode");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
             }
         });
@@ -338,7 +336,7 @@ public class Karel extends javax.swing.JFrame
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 607, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(StepCount)
@@ -371,7 +369,7 @@ public class Karel extends javax.swing.JFrame
         bottomSubContainer.setLayout(bottomSubContainerLayout);
         bottomSubContainerLayout.setHorizontalGroup(
             bottomSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1019, Short.MAX_VALUE)
+            .addGap(0, 905, Short.MAX_VALUE)
         );
         bottomSubContainerLayout.setVerticalGroup(
             bottomSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -394,47 +392,34 @@ public class Karel extends javax.swing.JFrame
         buttonPanel.setVisible(false);
         buttonPanel.setPreferredSize(new java.awt.Dimension(395, 440));
 
-        jButton4.setText("Go");
-        jButton4.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Left");
-        jButton5.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
 
-        jButton6.setText("Right");
-        jButton6.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
 
         jButton8.setText("Get");
-        jButton8.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
             }
         });
 
         jButton9.setText("Put");
-        jButton9.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton9ActionPerformed(evt);
             }
         });
@@ -444,66 +429,55 @@ public class Karel extends javax.swing.JFrame
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(84, 84, 84)
+                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jButton4)
                     .addGroup(buttonPanelLayout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(jButton5)
-                        .addGap(71, 71, 71)
-                        .addComponent(jButton6))
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(buttonPanelLayout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addComponent(jButton4))
-                    .addGroup(buttonPanelLayout.createSequentialGroup()
-                        .addGap(80, 80, 80)
                         .addComponent(jButton8)
-                        .addGap(41, 41, 41)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton9)))
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
-        buttonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jButton5, jButton6, jButton8, jButton9});
+        buttonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton5, jButton6, jButton8, jButton9});
 
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                .addGap(100, 100, 100)
+                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(buttonPanelLayout.createSequentialGroup()
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))
+                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8)
                     .addComponent(jButton9))
-                .addContainerGap(290, Short.MAX_VALUE))
+                .addContainerGap(186, Short.MAX_VALUE))
         );
 
         leftContainer.add(buttonPanel, "card2");
 
-        Slowdown.setText("Slowdown");
-        Slowdown.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Slowdown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Slowdown(evt);
             }
         });
 
-        Pause.setText("Pause");
-        Pause.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Pause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Pause(evt);
             }
         });
 
-        Speedup.setText("Speedup");
-        Speedup.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Speedup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Speedup(evt);
             }
         });
@@ -512,20 +486,15 @@ public class Karel extends javax.swing.JFrame
         speedCounter.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         speedCounter.setText("Speed:        " + currSpeed);
 
-        Stop.setText("Stop");
-        Stop.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Stop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Stop(evt);
             }
         });
 
         Reset.setText("Reset");
-        Reset.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Reset(evt);
             }
         });
@@ -535,43 +504,40 @@ public class Karel extends javax.swing.JFrame
         manualPanelLayout.setHorizontalGroup(
             manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manualPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(130, 130, 130))
-            .addGroup(manualPanelLayout.createSequentialGroup()
-                .addGap(47, 47, 47)
+                .addContainerGap(131, Short.MAX_VALUE)
                 .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(manualPanelLayout.createSequentialGroup()
-                        .addComponent(Slowdown)
-                        .addGap(49, 49, 49))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manualPanelLayout.createSequentialGroup()
-                        .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)))
-                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(manualPanelLayout.createSequentialGroup()
-                        .addComponent(Pause)
-                        .addGap(56, 56, 56)
-                        .addComponent(Speedup)
-                        .addContainerGap(26, Short.MAX_VALUE))
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(Slowdown, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Pause, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Speedup, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(96, 96, 96))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manualPanelLayout.createSequentialGroup()
-                        .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78))))
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(speedCounter)
+                            .addComponent(Reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(130, 130, 130))))
         );
         manualPanelLayout.setVerticalGroup(
             manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(manualPanelLayout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Slowdown)
-                    .addComponent(Pause)
-                    .addComponent(Speedup))
-                .addGap(37, 37, 37)
-                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE)
+                .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Stop, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(manualPanelLayout.createSequentialGroup()
+                        .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Slowdown, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Speedup, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(Pause, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         leftContainer.add(manualPanel, "card3");
@@ -602,7 +568,7 @@ public class Karel extends javax.swing.JFrame
         world.setLayout(worldLayout);
         worldLayout.setHorizontalGroup(
             worldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 624, Short.MAX_VALUE)
+            .addGap(0, 588, Short.MAX_VALUE)
         );
         worldLayout.setVerticalGroup(
             worldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -618,20 +584,16 @@ public class Karel extends javax.swing.JFrame
         jMenu1.setText("File");
 
         jMenuItem2.setText("Open New Map From File");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
             }
         });
         jMenu1.add(jMenuItem2);
 
         jMenuItem1.setText("Reset Current Map");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
             }
         });
@@ -642,44 +604,44 @@ public class Karel extends javax.swing.JFrame
         jMenu3.setText("Themes");
 
         jMenuItem6.setText("Zelda");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem6ActionPerformed(evt);
             }
         });
         jMenu3.add(jMenuItem6);
 
         jMenuItem5.setText("MegaMan");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem5ActionPerformed(evt);
             }
         });
         jMenu3.add(jMenuItem5);
+
+        jMenuItem7.setText("Princess Peach");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem7);
 
         jMenuBar1.add(jMenu3);
 
         jMenu2.setText("Help");
 
         jMenuItem3.setText("Open Help File (.txt)");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
             }
         });
         jMenu2.add(jMenuItem3);
 
         jMenuItem4.setText("Open Help File (.html)");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);
             }
         });
@@ -702,14 +664,6 @@ public class Karel extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton3ActionPerformed
-    {//GEN-HEADEREND:event_jButton3ActionPerformed
-        manualPanel.setVisible(false);
-        textframe.setVisible(false);
-        loop.stop();
-        buttonPanel.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton4ActionPerformed
     {//GEN-HEADEREND:event_jButton4ActionPerformed
@@ -740,14 +694,6 @@ public class Karel extends javax.swing.JFrame
         world.choiceMade("put");
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton10ActionPerformed
-    {//GEN-HEADEREND:event_jButton10ActionPerformed
-        buttonPanel.setVisible(false);
-        manualPanel.setVisible(false);
-        loop.stop();
-        textframe.setVisible(true);
-    }//GEN-LAST:event_jButton10ActionPerformed
-
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
     //Open help file (write help file...)
         Desktop dt = Desktop.getDesktop();
@@ -761,8 +707,8 @@ public class Karel extends javax.swing.JFrame
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         // get a file path from the user
-        loop.stop();
-        buttonPanel.setVisible(false);
+        programmerThread.stop();
+        buttonPanel.setVisible(true);
         manualPanel.setVisible(false);
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Please Specify the File To Open");
@@ -802,8 +748,8 @@ public class Karel extends javax.swing.JFrame
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        loop.stop();
-        buttonPanel.setVisible(false);
+        programmerThread.stop();
+        buttonPanel.setVisible(true);
         manualPanel.setVisible(false);
         world.worldDeleter();
         world.initWorld();
@@ -818,13 +764,21 @@ public class Karel extends javax.swing.JFrame
         switcher = (JButton) source;
         if (switcher.getText().equals("Pause"))
         {
-            loop.suspend();
+            programmerThread.suspend();
             switcher.setText("Resume");
+            try {
+             Image img = ImageIO.read(getClass().getResource("play.png"));
+             switcher.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
         }
         else if (switcher.getText().equals("Resume"))
         {
-            loop.resume();
+            programmerThread.resume();
             switcher.setText("Pause");
+            try {
+             Image img = ImageIO.read(getClass().getResource("pause.png"));
+             switcher.setIcon(new ImageIcon(img));
+            } catch (IOException ex) {}
         }
     }//GEN-LAST:event_Pause
 
@@ -847,19 +801,21 @@ public class Karel extends javax.swing.JFrame
     }//GEN-LAST:event_Speedup
 
     private void Reset(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reset
-        loop.stop();
+        programmerThread.stop();
         world.worldDeleter();
         world.initWorld();
         buttonPanel.setVisible(false);
         manualPanel.setVisible(false);
+        programmerFrame.setVisible(true);
         //paint
         this.repaint();
     }//GEN-LAST:event_Reset
 
     private void Stop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Stop
-        loop.stop();
+        programmerThread.stop();
         buttonPanel.setVisible(false);
         manualPanel.setVisible(false);
+        programmerFrame.setVisible(true);
     }//GEN-LAST:event_Stop
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -883,6 +839,141 @@ public class Karel extends javax.swing.JFrame
         this.repaint();
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        //set a Princess Peach Theme!
+        world.setThemes("Peach");
+        this.repaint();
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
+        programmerThread.stop();
+        programmerFrame.setVisible(true);
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        manualPanel.setVisible(false);
+        programmerFrame.setVisible(false);
+        programmerThread.stop();
+        buttonPanel.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void programmerRunButton(java.awt.event.ActionEvent evt)
+    {
+        programmerFrame.setVisible(false);
+        buttonPanel.setVisible(false);
+        manualPanel.setVisible(true);
+        currSpeed = 5;
+        world.setSpeed(currSpeed);
+        speedCounter.setText("Speed:        " + currSpeed);
+        Pause.setText("Pause");
+        try {
+         Image img = ImageIO.read(getClass().getResource("pause.png"));
+         Pause.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {}
+        programmerThread.stop();
+        final List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));                       
+        Runnable r1 = new Runnable()
+        {
+             public void run()
+             {
+                  world.doScript(0, 0, user_input); // Running
+                  buttonPanel.setVisible(false);
+                  manualPanel.setVisible(false);
+                  programmerFrame.setVisible(false);
+             }
+         };
+         programmerThread = new Thread(r1);
+         programmerThread.start();
+    }
+    private void programmerSaveButton(java.awt.event.ActionEvent evt)
+    {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Please Enter File Name and Choose Location");
+        List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));
+        PrintWriter out = null;                      
+
+        int userSelection = fileChooser.showSaveDialog(fileChooser);
+        if (userSelection == JFileChooser.APPROVE_OPTION) 
+        {
+             try 
+             {
+                 File fileToSave = fileChooser.getSelectedFile();
+
+                 out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
+                 for(int loop = 0; loop < user_input.size(); loop++)
+                 {
+                    out.println(user_input.get(loop));                                
+                 }
+
+            out.close();
+             } catch (FileNotFoundException ex) {
+                 Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+             }
+        }
+    }
+    
+    private void programmerLoadButton(java.awt.event.ActionEvent evt)
+    {
+        programmerThread.stop();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Please Specify the File To Open");
+        File fileToOpen;
+        BufferedReader readIn;
+        String newCode = new String();
+        
+        int userSelection = userSelection = fileChooser.showOpenDialog(fileChooser);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) 
+        {
+            try {
+                fileToOpen = fileChooser.getSelectedFile();
+                readIn = new BufferedReader(new FileReader(fileToOpen));
+                
+                while(readIn.ready())
+                {
+                    newCode += readIn.readLine();
+                    newCode += '\n';
+                }
+                
+                programmerText.setText(newCode);
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Karel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Karel.class.getName()).log(Level.SEVERE, null, ex);
+            }        
+        }
+    }
+    
+    private void programmerAutosaveButton(java.awt.event.ActionEvent evt)
+    {
+        try 
+            {
+                 List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));
+                 PrintWriter out;
+                 DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
+                 Date date = new Date();
+
+                 String fileName1;
+                 fileName1 = "KarelCode_";
+                 fileName1 += dateFormat.format(date);
+                 fileName1 += ".txt";
+
+
+                 out = new PrintWriter(fileName1);
+
+                 for(int loop = 0; loop < user_input.size(); loop++)
+                 {
+                    out.println(user_input.get(loop));                                
+                 }
+
+                 out.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+    }
     /**
      * @param args the command line arguments
      */
@@ -958,6 +1049,7 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel leftContainer;
     private javax.swing.JPanel mainContainer;
     private javax.swing.JPanel manualPanel;
