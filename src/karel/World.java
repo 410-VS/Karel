@@ -372,11 +372,12 @@ public class World extends JPanel
                             current_line = current_line.substring(1); // Removing the tab
                         }
                     }
-                    if (current_line.startsWith("\t"))
-                    {
-                        ++line_count;
-                        continue;
-                    }
+                }
+                // If the line is the correct scope, we should have no tabs
+                if (current_line.startsWith("\t"))
+                { // If we do have a tab, ignore the line and continue
+                    ++line_count;
+                    continue;
                 }
                 current_line = current_line.trim();
                 
