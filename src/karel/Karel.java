@@ -289,8 +289,6 @@ public class Karel extends javax.swing.JFrame
         jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1006, 550));
-        setPreferredSize(new java.awt.Dimension(990, 546));
         setResizable(false);
 
         mainContainer.setBackground(new java.awt.Color(51, 0, 0));
