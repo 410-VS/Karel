@@ -306,17 +306,7 @@ public class World extends JPanel
         //Get where karel wants to move
         int newX = x + karel.GetX();
         int newY = y + karel.GetY();
-
-        if (karel.isHomeCollision(karel.GetX(),karel.GetY(),Home))
-        {
-            //if karel is home and all gems are taken, move and end game
-            if(gems.isEmpty())
-            {
-                karel.move(x,y);
-                isRunning = false;
-                infoBox("You have won!", "Congratulations!");
-            }
-        }
+        
         if (karel.isWallCollision(newX, newY, walls))
         {
             //collided with wall - do not move karel
@@ -326,6 +316,16 @@ public class World extends JPanel
         {
             //move karel
             karel.move(x, y);
+        }
+        repaint();
+        if (karel.isHomeCollision(karel.GetX(),karel.GetY(),Home))
+        {
+            //if karel is home and all gems are taken, move and end game
+            if(gems.isEmpty())
+            {
+                isRunning = false;
+                infoBox("You have won!", "Congratulations!");
+            }
         }
         return false; // no error
     }              
