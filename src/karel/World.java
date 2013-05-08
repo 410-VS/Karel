@@ -669,6 +669,7 @@ public class World extends JPanel
             
             Home.setNewImage(newTheme+"Home.png");
             karel.setNewTheme(newTheme);
+            karel.repaintNewTheme();
             //the player setnewtheme only happens when the player changes direction..
             //need to reset the image outside of the change direction...
         }

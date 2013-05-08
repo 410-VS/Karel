@@ -86,4 +86,24 @@ public class Player extends Entity
         Image image = iia.getImage();
         this.setImage(image);
     }
+    
+    public void repaintNewTheme()
+    {
+        char currentDirection = this.direction;
+        String directionString=null;
+        
+        switch(currentDirection)
+        {
+            case 'v': directionString = "down"; break;
+            case '^': directionString = "up"; break;
+            case '>': directionString = "right"; break;
+            case '<': directionString = "left"; break;
+        }
+        
+        URL loc = this.getClass().getResource(themeName+directionString +".png");
+        ImageIcon iia = new ImageIcon(loc);
+        Image image = iia.getImage();
+        this.setImage(image);
+        
+    }
 }
