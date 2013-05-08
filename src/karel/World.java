@@ -419,7 +419,7 @@ public class World extends JPanel
                     case "get"  :
                            try 
                            {
-                               Thread.currentThread().sleep(1550 - (Speed * 150));
+                               Thread.currentThread().sleep((3000/Speed) - 290);
                            }
                            catch(Exception e){}; 
                            boolean error = choiceMade(current_line);

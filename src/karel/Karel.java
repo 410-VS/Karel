@@ -820,6 +820,7 @@ public class Karel extends javax.swing.JFrame
         currSpeed = 5;
         world.setSpeed(currSpeed);
         speedCounter.setText("Speed:        " + currSpeed);
+        programmerThread.stop();
         final List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));                       
         Runnable r1 = new Runnable()
         {
