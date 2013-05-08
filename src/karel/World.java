@@ -23,7 +23,7 @@ public class World extends JPanel
     private boolean isRunning = true; //game ending bool
     //Wall home = new Wall(0,0); // home space
     protected Player karel; //object for karel 
-    private int w = 18;
+    private int w = 19;
     private int h = 14;
     private home Home;
     private Gem tempGem;
@@ -96,10 +96,11 @@ public class World extends JPanel
         {
             //Grab the item in string at i
             char item = level.charAt(i); 
-            
-             a = new Area(x, y);
-                areas.add(a);
-
+            if (item != '\n')
+            {    
+                a = new Area(x, y);
+                 areas.add(a);
+            }
             //Adjust X,Y value based on what character is at i
             //and create an item in the array list if needed
             if (item == '\n') 
