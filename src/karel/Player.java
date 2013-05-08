@@ -9,8 +9,15 @@ public class Player extends Entity
 {
     char direction; //karels icon ^ > < v
     
-    private int gemBag; //how many gems karel is holding
+    private ArrayList Bag = new ArrayList();
+    Gem tempGem;
     private int StepCounter;
+    private String themeName = "Zelda";
+    
+    public void setNewTheme(String newTheme)
+    {
+        themeName = newTheme;
+    }
     
     public Player(int x, int y) 
     {
@@ -18,7 +25,7 @@ public class Player extends Entity
         StepCounter = 0;
         direction ='^';
 
-        URL loc = this.getClass().getResource("up.png");
+        URL loc = this.getClass().getResource("ZeldaUp.png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
@@ -43,18 +50,22 @@ public class Player extends Entity
         StepCounter++;
     }
     
-    public void addGem()
+    public void addGem(Gem gem)
     {
-        this.gemBag++;
+        gem.SetX(0);
+        gem.SetY(0);
+        this.Bag.add(gem);
     }
     
-    public void removeGem()
+    public Gem removeGem()
     {
-        this.gemBag--;
+        tempGem = (Gem) Bag.get(0);
+        this.Bag.remove(0);
+        return tempGem;
     }
     public int getGemCount()
     {
-        return this.gemBag;
+        return this.Bag.size();
     }
     
     
@@ -70,9 +81,29 @@ public class Player extends Entity
     
     public void ChangeImage(String NewDirection)
     {   
-        URL loc = this.getClass().getResource(NewDirection +".png");
+        URL loc = this.getClass().getResource(themeName+NewDirection +".png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
+    }
+    
+    public void repaintNewTheme()
+    {
+        char currentDirection = this.direction;
+        String directionString=null;
+        
+        switch(currentDirection)
+        {
+            case 'v': directionString = "down"; break;
+            case '^': directionString = "up"; break;
+            case '>': directionString = "right"; break;
+            case '<': directionString = "left"; break;
+        }
+        
+        URL loc = this.getClass().getResource(themeName+directionString +".png");
+        ImageIcon iia = new ImageIcon(loc);
+        Image image = iia.getImage();
+        this.setImage(image);
+        
     }
 }

@@ -23,9 +23,10 @@ public class World extends JPanel
     private boolean isRunning = true; //game ending bool
     //Wall home = new Wall(0,0); // home space
     protected Player karel; //object for karel 
-    private int w = 18;
+    private int w = 19;
     private int h = 14;
     private home Home;
+    private Gem tempGem;
     JTextArea lines;
     JTextArea jta;
     int Speed = 5;
@@ -95,10 +96,11 @@ public class World extends JPanel
         {
             //Grab the item in string at i
             char item = level.charAt(i); 
-            
-             a = new Area(x, y);
-                areas.add(a);
-
+            if (item != '\n')
+            {    
+                a = new Area(x, y);
+                 areas.add(a);
+            }
             //Adjust X,Y value based on what character is at i
             //and create an item in the array list if needed
             if (item == '\n') 
@@ -156,8 +158,9 @@ public class World extends JPanel
         world.addAll(walls);
         world.addAll(areas);
         world.addAll(gems);
-        world.add(karel);
         world.add(Home);
+        world.add(karel);
+
         
         for (int i = 0; i < areas.size(); i++)
         {
@@ -192,8 +195,9 @@ public class World extends JPanel
         buildWorld(g);
     }
     
-    public void choiceMade(String choice)
+    public boolean choiceMade(String choice)
     {    
+        boolean error = false;
         //Get karels current direction
         char direction = karel.GetDirection();
         switch (choice)
@@ -202,16 +206,16 @@ public class World extends JPanel
                 switch(direction)
                 {
                     case '^':
-                        handleMove(0,-SPACE);
+                        error = handleMove(0,-SPACE);
                         break;
                     case 'v':
-                        handleMove(0, SPACE);
+                        error = handleMove(0, SPACE);
                         break;
                     case '>':
-                        handleMove(SPACE,0);
+                        error = handleMove(SPACE,0);
                         break;
                     case '<':
-                        handleMove(-SPACE,0);
+                        error = handleMove(-SPACE,0);
                         break;
                 }
                 break;
@@ -261,18 +265,25 @@ public class World extends JPanel
                 //if the gem is on the same space as karel
                 if (karel.isGemCollision(karel.GetX(), karel.GetY(), gems) != -1)
                 {
-                    //pick up the gem
-                    gems.remove(karel.isGemCollision(karel.GetX(), karel.GetY(), gems));
-                    karel.addGem();
+                    //get the array location of this gem
+                    int gemLocation = karel.isGemCollision(karel.GetX(), karel.GetY(), gems);
+                    tempGem = (Gem) gems.get(gemLocation); 
+                   
+                    //put in karels bag
+                    karel.addGem(tempGem);
+                    
+                    //remove from world
+                    gems.remove(gemLocation);
                 }
                 break;
             case "put":
-                //pick up the gem
+                //drop gem from gem bag
                 if(karel.getGemCount() > 0)
                 {
-                    karel.removeGem();
-                    Gem gem = new Gem(karel.GetX(),karel.GetY());
-                    gems.add(gem);
+                    tempGem = karel.removeGem();
+                    tempGem.SetX(karel.GetX());
+                    tempGem.SetY(karel.GetY());
+                    gems.add(tempGem);
                 }
                 break;
             case "manual":
@@ -280,6 +291,7 @@ public class World extends JPanel
         }
         karel.addStep();
         this.repaint();
+        return error;
     }
     
     public void worldDeleter()
@@ -289,7 +301,7 @@ public class World extends JPanel
         areas.clear();
     }
      
-    public void handleMove(int x, int y)
+    public boolean handleMove(int x, int y)
     {
         //Get where karel wants to move
         int newX = x + karel.GetX();
@@ -308,12 +320,14 @@ public class World extends JPanel
         if (karel.isWallCollision(newX, newY, walls))
         {
             //collided with wall - do not move karel
+            return true; // returning an error
         }
         else
         {
             //move karel
             karel.move(x, y);
         }
+        return false; // no error
     }              
             
         public int doScript(int line_count, int scope, List<String> user_input)
@@ -407,7 +421,12 @@ public class World extends JPanel
                                Thread.currentThread().sleep(2050 - (Speed * 200));
                            }
                            catch(Exception e){}; 
-                           choiceMade(current_line);
+                           boolean error = choiceMade(current_line);
+                           if (error)
+                           {
+                               infoBox("Karel has crashed into a wall!", "ERROR");
+                               return throw_error;                              
+                           }
                            break;
                     case "repeat":  
                             // Checking if the repeat integer is out of range 
@@ -627,6 +646,33 @@ public class World extends JPanel
         public void setSpeed(int newSpeed)
         {
             Speed = newSpeed;
+        }
+        
+        public void setThemes(String newTheme)
+        {
+            for(int loop = 0; loop<gems.size(); loop++)
+            {
+                Gem temp = (Gem) gems.get(loop);
+                temp.setNewImage(newTheme+"Gem.png");
+            }
+            
+            for(int loop = 0; loop<walls.size(); loop++)
+            {
+                Wall temp = (Wall) walls.get(loop);
+                temp.setNewImage(newTheme+"Wall.png");
+            }
+            
+            for(int loop = 0; loop<areas.size(); loop++)
+            {
+                Area temp = (Area) areas.get(loop);
+                temp.setNewImage(newTheme+"Area.png");
+            }
+            
+            Home.setNewImage(newTheme+"Home.png");
+            karel.setNewTheme(newTheme);
+            karel.repaintNewTheme();
+            //the player setnewtheme only happens when the player changes direction..
+            //need to reset the image outside of the change direction...
         }
 
 }
