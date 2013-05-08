@@ -84,7 +84,7 @@ public class Karel extends javax.swing.JFrame
         programmerFrame = new JInternalFrame("Programmer Mode");
         // Building Menu
         JMenuBar textbar;
-        JButton menuSave, menuSaveAs;
+        JButton menuSave, menuSaveAs, menuLoad;
         JButton menuRun;
         textbar = new JMenuBar();
         menuRun = new JButton("Run");
@@ -105,11 +105,16 @@ public class Karel extends javax.swing.JFrame
         menuSave.setFont(new Font("Arial", Font.PLAIN, 10));
         menuSave.setMinimumSize(new Dimension(75, 25));  
         menuSave.setPreferredSize(new Dimension(75, 25));
-        menuSave.setMaximumSize(new Dimension(75, 25));
-        
+        menuSave.setMaximumSize(new Dimension(75, 25));        
         textbar.add(menuSave);
-
-
+        
+        menuLoad = new JButton("Load");
+        menuLoad.setFont(new Font("Arial", Font.PLAIN, 10));
+        menuLoad.setMinimumSize(new Dimension(75, 25));  
+        menuLoad.setPreferredSize(new Dimension(75, 25));
+        menuLoad.setMaximumSize(new Dimension(75, 25));        
+        textbar.add(menuLoad);
+        
         // Creating the JTextArea's
         programmerFrame.setJMenuBar(textbar);
 //            programmerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -184,6 +189,15 @@ public class Karel extends javax.swing.JFrame
                     programmerSaveButton(e);                   
                }                       
             });
+        
+        menuLoad.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(java.awt.event.ActionEvent e)
+               {
+                    programmerLoadButton(e);                   
+               }                       
+            });        
 
         menuSaveAs.addActionListener(new ActionListener() 
             {
@@ -690,7 +704,7 @@ public class Karel extends javax.swing.JFrame
         // TODO add your handling code here:
         // get a file path from the user
         programmerThread.stop();
-        buttonPanel.setVisible(false);
+        buttonPanel.setVisible(true);
         manualPanel.setVisible(false);
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Please Specify the File To Open");
@@ -731,7 +745,7 @@ public class Karel extends javax.swing.JFrame
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         programmerThread.stop();
-        buttonPanel.setVisible(false);
+        buttonPanel.setVisible(true);
         manualPanel.setVisible(false);
         world.worldDeleter();
         world.initWorld();
@@ -780,6 +794,7 @@ public class Karel extends javax.swing.JFrame
         world.initWorld();
         buttonPanel.setVisible(false);
         manualPanel.setVisible(false);
+        programmerFrame.setVisible(true);
         //paint
         this.repaint();
     }//GEN-LAST:event_Reset
@@ -788,6 +803,7 @@ public class Karel extends javax.swing.JFrame
         programmerThread.stop();
         buttonPanel.setVisible(false);
         manualPanel.setVisible(false);
+        programmerFrame.setVisible(true);
     }//GEN-LAST:event_Stop
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -866,6 +882,40 @@ public class Karel extends javax.swing.JFrame
              }
         }
     }
+    
+    private void programmerLoadButton(java.awt.event.ActionEvent evt)
+    {
+        programmerThread.stop();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Please Specify the File To Open");
+        File fileToOpen;
+        BufferedReader readIn;
+        String newCode = new String();
+        
+        int userSelection = userSelection = fileChooser.showOpenDialog(fileChooser);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) 
+        {
+            try {
+                fileToOpen = fileChooser.getSelectedFile();
+                readIn = new BufferedReader(new FileReader(fileToOpen));
+                
+                while(readIn.ready())
+                {
+                    newCode += readIn.readLine();
+                    newCode += '\n';
+                }
+                
+                programmerText.setText(newCode);
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Karel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Karel.class.getName()).log(Level.SEVERE, null, ex);
+            }        
+        }
+    }
+    
     private void programmerAutosaveButton(java.awt.event.ActionEvent evt)
     {
         try 
