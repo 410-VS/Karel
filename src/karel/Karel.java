@@ -4,10 +4,11 @@
  */
 package karel;
 
-import java.awt.Dimension; 
+import java.awt.Font;
+import java.awt.Dimension;
+import javax.swing.JInternalFrame;
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -31,7 +32,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JInternalFrame;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -49,10 +49,10 @@ public class Karel extends javax.swing.JFrame
 {
     private final int OFFSET = 0;
     
-    JTextArea lineCount;
+    JTextArea lines;
     JTextArea programmerText;
     JInternalFrame programmerFrame;
-    Thread scriptThread;
+    Thread programmerThread;
     int currSpeed = 5;
     /**
      * Creates new form Karel
@@ -62,7 +62,6 @@ public class Karel extends javax.swing.JFrame
         this.setTitle("Karel");
         initComponents();
         InitUI();
-        // Timer to update counters every 100ms
         Timer Gemupdater = new Timer(100, new ActionListener()
         {
           @Override
@@ -73,7 +72,7 @@ public class Karel extends javax.swing.JFrame
           }
         });
         Gemupdater.start();
-        scriptThread = new Thread();
+        programmerThread = new Thread();
     }
     
     public void InitUI() 
@@ -84,35 +83,35 @@ public class Karel extends javax.swing.JFrame
         // Creating the popout frame with line numbering
         programmerFrame = new JInternalFrame("Programmer Mode");
         // Building Menu
-        JMenuBar programmerBar;
-        JMenu programmerMenu;
+        JMenuBar textbar;
+        JMenu textmenu;
         JMenuItem menuSave, menuSaveAs;
         JButton menuRun;
-        programmerBar = new JMenuBar();
-        programmerMenu = new JMenu("File");
-        programmerMenu.setMnemonic(KeyEvent.VK_A);
-        programmerBar.add(programmerMenu);
+        textbar = new JMenuBar();
+        textmenu = new JMenu("File");
+        textmenu.setMnemonic(KeyEvent.VK_A);
+        textbar.add(textmenu);
         menuRun = new JButton("Run");
         menuRun.setFont(new Font("Arial", Font.PLAIN, 10));
         menuRun.setMinimumSize(new Dimension(50, 25));  
         menuRun.setPreferredSize(new Dimension(50, 25));
         menuRun.setMaximumSize(new Dimension(50, 25));
-        programmerBar.add(menuRun);
-        
+        textbar.add(menuRun);
+
         menuSaveAs = new JMenuItem("Auto Save");
-        programmerMenu.add(menuSaveAs);
+        textmenu.add(menuSaveAs);
 
         menuSave = new JMenuItem("Save As");
-        programmerMenu.add(menuSave);      
+        textmenu.add(menuSave);
 
 
         // Creating the JTextArea's
-        programmerFrame.setJMenuBar(programmerBar);
+        programmerFrame.setJMenuBar(textbar);
 //            programmerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JScrollPane textpane = new JScrollPane();
         programmerText = new JTextArea();
-        lineCount = new JTextArea("1");
-        // Listening for input and adding lineCount
+        lines = new JTextArea("1");
+        // Listening for input and adding lines
         programmerText.getDocument().addDocumentListener(new DocumentListener()
             {
                     public String getText()
@@ -128,23 +127,23 @@ public class Karel extends javax.swing.JFrame
                     }
                     @Override
                     public void changedUpdate(DocumentEvent de) {
-                            lineCount.setText(getText());
+                            lines.setText(getText());
                     }
 
                     @Override
                     public void insertUpdate(DocumentEvent de) {
-                            lineCount.setText(getText());
+                            lines.setText(getText());
                     }
 
                     @Override
                     public void removeUpdate(DocumentEvent de) {
-                            lineCount.setText(getText());
+                            lines.setText(getText());
                     }
 
             });
 
         textpane.getViewport().add(programmerText);
-        textpane.setRowHeaderView(lineCount);
+        textpane.setRowHeaderView(lines);
         textpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         programmerFrame.add(textpane);
@@ -158,14 +157,14 @@ public class Karel extends javax.swing.JFrame
         // Removing the title bar of the programmerframe
         ((javax.swing.plaf.basic.BasicInternalFrameUI)programmerFrame.getUI())
                                                             .setNorthPane(null);
-        lineCount.setBackground(Color.LIGHT_GRAY);
-        lineCount.setEditable(false);
+        lines.setBackground(Color.LIGHT_GRAY);
+        lines.setEditable(false);
         menuRun.addActionListener(new ActionListener() 
         {
                @Override
                public void actionPerformed(java.awt.event.ActionEvent e)
                {
-                        programmerRun(e);
+                        programmerRunButton(e);
                }
 
 
@@ -177,8 +176,8 @@ public class Karel extends javax.swing.JFrame
                @Override
                public void actionPerformed(java.awt.event.ActionEvent e)
                {
-                    programmerSave(e);
-               }
+                    programmerSaveButton(e);                   
+               }                       
             });
 
         menuSaveAs.addActionListener(new ActionListener() 
@@ -186,7 +185,7 @@ public class Karel extends javax.swing.JFrame
                @Override
                public void actionPerformed(java.awt.event.ActionEvent e)
                {
-                   programmerAutosave(e);
+                   programmerAutosaveButton(e);
                }                       
             });      
 
@@ -236,6 +235,7 @@ public class Karel extends javax.swing.JFrame
         jMenu3 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -580,6 +580,14 @@ public class Karel extends javax.swing.JFrame
         });
         jMenu3.add(jMenuItem5);
 
+        jMenuItem7.setText("Princess Peach");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem7);
+
         jMenuBar1.add(jMenu3);
 
         jMenu2.setText("Help");
@@ -622,7 +630,7 @@ public class Karel extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jButton3ActionPerformed
         manualPanel.setVisible(false);
         programmerFrame.setVisible(false);
-        scriptThread.stop();
+        programmerThread.stop();
         buttonPanel.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -659,7 +667,7 @@ public class Karel extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jButton10ActionPerformed
         buttonPanel.setVisible(false);
         manualPanel.setVisible(false);
-        scriptThread.stop();
+        programmerThread.stop();
         programmerFrame.setVisible(true);
     }//GEN-LAST:event_jButton10ActionPerformed
 
@@ -676,7 +684,7 @@ public class Karel extends javax.swing.JFrame
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         // get a file path from the user
-        scriptThread.stop();
+        programmerThread.stop();
         buttonPanel.setVisible(false);
         manualPanel.setVisible(false);
         JFileChooser fileChooser = new JFileChooser();
@@ -717,7 +725,7 @@ public class Karel extends javax.swing.JFrame
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        scriptThread.stop();
+        programmerThread.stop();
         buttonPanel.setVisible(false);
         manualPanel.setVisible(false);
         world.worldDeleter();
@@ -733,12 +741,12 @@ public class Karel extends javax.swing.JFrame
         switcher = (JButton) source;
         if (switcher.getText().equals("Pause"))
         {
-            scriptThread.suspend();
+            programmerThread.suspend();
             switcher.setText("Resume");
         }
         else if (switcher.getText().equals("Resume"))
         {
-            scriptThread.resume();
+            programmerThread.resume();
             switcher.setText("Pause");
         }
     }//GEN-LAST:event_Pause
@@ -762,7 +770,7 @@ public class Karel extends javax.swing.JFrame
     }//GEN-LAST:event_Speedup
 
     private void Reset(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reset
-        scriptThread.stop();
+        programmerThread.stop();
         world.worldDeleter();
         world.initWorld();
         buttonPanel.setVisible(false);
@@ -772,7 +780,7 @@ public class Karel extends javax.swing.JFrame
     }//GEN-LAST:event_Reset
 
     private void Stop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Stop
-        scriptThread.stop();
+        programmerThread.stop();
         buttonPanel.setVisible(false);
         manualPanel.setVisible(false);
     }//GEN-LAST:event_Stop
@@ -798,30 +806,35 @@ public class Karel extends javax.swing.JFrame
         this.repaint();
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
-    // Run button from programmer mode menu
-    private void programmerRun(java.awt.event.ActionEvent evt)
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        //set a Princess Peach Theme!
+        world.setThemes("Peach");
+        this.repaint();
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void programmerRunButton(java.awt.event.ActionEvent evt)
     {
         programmerFrame.setVisible(false);
         buttonPanel.setVisible(false);
-        currSpeed = 5; // Resetting speed
-        world.setSpeed(currSpeed);
         manualPanel.setVisible(true);
+        currSpeed = 5;
+        world.setSpeed(currSpeed);
+        speedCounter.setText("Speed:        " + currSpeed);
         final List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));                       
         Runnable r1 = new Runnable()
         {
              public void run()
              {
-                  int line_count = world.doScript(0, 0, user_input); // Running
+                  world.doScript(0, 0, user_input); // Running
                   buttonPanel.setVisible(false);
                   manualPanel.setVisible(false);
                   programmerFrame.setVisible(false);
              }
          };
-         scriptThread = new Thread(r1);
-         scriptThread.start();
+         programmerThread = new Thread(r1);
+         programmerThread.start();
     }
-    // Save button from programmer mode menu
-    private void programmerSave(java.awt.event.ActionEvent evt)
+    private void programmerSaveButton(java.awt.event.ActionEvent evt)
     {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Please Enter File Name and Choose Location");
@@ -846,36 +859,33 @@ public class Karel extends javax.swing.JFrame
                  Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
              }
         }
-
-                  
     }
-    // Autosave button from programmer mode menu
-    private void programmerAutosave(java.awt.event.ActionEvent evt)
+    private void programmerAutosaveButton(java.awt.event.ActionEvent evt)
     {
         try 
-        {
-             List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));
-             PrintWriter out;
-             DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
-             Date date = new Date();
+            {
+                 List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));
+                 PrintWriter out;
+                 DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
+                 Date date = new Date();
 
-             String fileName1;
-             fileName1 = "KarelCode_";
-             fileName1 += dateFormat.format(date);
-             fileName1 += ".txt";
+                 String fileName1;
+                 fileName1 = "KarelCode_";
+                 fileName1 += dateFormat.format(date);
+                 fileName1 += ".txt";
 
 
-             out = new PrintWriter(fileName1);
+                 out = new PrintWriter(fileName1);
 
-             for(int loop = 0; loop < user_input.size(); loop++)
-             {
-                out.println(user_input.get(loop));                                
-             }
+                 for(int loop = 0; loop < user_input.size(); loop++)
+                 {
+                    out.println(user_input.get(loop));                                
+                 }
 
-             out.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
-        }
+                 out.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+            } 
     }
     /**
      * @param args the command line arguments
@@ -952,6 +962,7 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel leftContainer;
     private javax.swing.JPanel mainContainer;
     private javax.swing.JPanel manualPanel;

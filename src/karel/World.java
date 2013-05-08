@@ -371,11 +371,11 @@ public class World extends JPanel
                         {
                             current_line = current_line.substring(1); // Removing the tab
                         }
-                    }
+                    }                    
                 }
-                // If the line is the correct scope, we should have no tabs
+                // if the current line is out of scope
                 if (current_line.startsWith("\t"))
-                { // If we do have a tab, ignore the line and continue
+                {
                     ++line_count;
                     continue;
                 }
@@ -419,7 +419,7 @@ public class World extends JPanel
                     case "get"  :
                            try 
                            {
-                               Thread.currentThread().sleep(2050 - (Speed * 200));
+                               Thread.currentThread().sleep(1550 - (Speed * 150));
                            }
                            catch(Exception e){}; 
                            boolean error = choiceMade(current_line);
