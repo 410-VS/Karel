@@ -77,7 +77,7 @@ public class Karel extends javax.swing.JFrame
     
     public void InitUI() 
     {
-        buttonPanel.setVisible(false);
+        buttonPanel.setVisible(true);
         manualPanel.setVisible(false);
         blankPanel.setVisible(true);
         // Creating the popout frame with line numbering
