@@ -15,7 +15,7 @@ public class home extends Entity
     public home(int x,int y)
     {
         super(x,y);
-        URL loc = this.getClass().getResource("tri1.png");
+        URL loc = this.getClass().getResource("ZeldaHome.png");
         ImageIcon iia = new ImageIcon(loc);
         image = iia.getImage();
         this.setImage(image);
