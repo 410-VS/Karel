@@ -325,6 +325,8 @@ public class World extends JPanel
             {
                 isRunning = false;
                 infoBox("You have won!", "Congratulations!");
+                worldDeleter();
+                initWorld();
             }
         }
         return false; // no error
