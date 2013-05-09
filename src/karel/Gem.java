@@ -13,7 +13,7 @@ public class Gem extends Entity
     {
         super(x,y);
         
-        URL loc = this.getClass().getResource("ZeldaGem.png");
+        URL loc = this.getClass().getResource("/karel/themes/ZeldaGem.png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
