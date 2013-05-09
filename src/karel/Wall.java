@@ -14,7 +14,7 @@ public class Wall extends Entity
     {
         super(x,y);
         
-        URL loc = this.getClass().getResource("ZeldaWall.png");
+        URL loc = this.getClass().getResource("/karel/themes/ZeldaWall.png");
         ImageIcon iia = new ImageIcon(loc);
         image = iia.getImage();
         this.setImage(image);
