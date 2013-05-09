@@ -691,6 +691,14 @@ public class World extends JPanel
                 temp.setNewImage(newTheme+"Gem.png");
             }
             
+            karel.updateGemsInBag(newTheme);
+            
+            for(int loop = 0; loop<karel.getGemCount(); loop++)
+            {
+                Gem temp = (Gem) gems.get(loop);
+                temp.setNewImage(newTheme+"Gem.png");
+            }            
+            
             for(int loop = 0; loop<walls.size(); loop++)
             {
                 Wall temp = (Wall) walls.get(loop);
