@@ -25,7 +25,7 @@ public class Player extends Entity
         StepCounter = 0;
         direction ='^';
 
-        URL loc = this.getClass().getResource("ZeldaUp.png");
+        URL loc = this.getClass().getResource("/karel/themes/ZeldaUp.png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
@@ -81,7 +81,7 @@ public class Player extends Entity
     
     public void ChangeImage(String NewDirection)
     {   
-        URL loc = this.getClass().getResource(themeName+NewDirection +".png");
+        URL loc = this.getClass().getResource("/karel/themes/"+themeName+NewDirection +".png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
@@ -100,7 +100,7 @@ public class Player extends Entity
             case '<': directionString = "left"; break;
         }
         
-        URL loc = this.getClass().getResource(themeName+directionString +".png");
+        URL loc = this.getClass().getResource("/karel/themes/" +themeName+directionString +".png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);

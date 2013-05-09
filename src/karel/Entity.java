@@ -104,7 +104,7 @@ public class Entity
     
     public void setNewImage(String newImage)
     {
-        URL loc = this.getClass().getResource(newImage);
+        URL loc = this.getClass().getResource("/karel/themes/" + newImage);
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);        

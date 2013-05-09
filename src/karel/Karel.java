@@ -81,31 +81,31 @@ public class Karel extends javax.swing.JFrame
     public void InitUI() 
     {
         try {
-             Image img = ImageIO.read(getClass().getResource("stop.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/stop.png"));
              Stop.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         try {
-             Image img = ImageIO.read(getClass().getResource("pause.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/pause.png"));
              Pause.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         try {
-             Image img = ImageIO.read(getClass().getResource("slower.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/slower.png"));
              Slowdown.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         try {
-             Image img = ImageIO.read(getClass().getResource("faster.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/faster.png"));
              Speedup.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         try {
-             Image img = ImageIO.read(getClass().getResource("go.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/go.png"));
              jButton4.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         try {
-             Image img = ImageIO.read(getClass().getResource("right.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/right.png"));
              jButton6.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         try {
-             Image img = ImageIO.read(getClass().getResource("left.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/left.png"));
              jButton5.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         Pause.setText("Pause");
@@ -286,6 +286,7 @@ public class Karel extends javax.swing.JFrame
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -293,7 +294,7 @@ public class Karel extends javax.swing.JFrame
         jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(990, 545));
+        setPreferredSize(new java.awt.Dimension(990, 550));
         setResizable(false);
 
         mainContainer.setBackground(new java.awt.Color(51, 0, 0));
@@ -336,7 +337,7 @@ public class Karel extends javax.swing.JFrame
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 607, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 611, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(StepCount)
@@ -369,7 +370,7 @@ public class Karel extends javax.swing.JFrame
         bottomSubContainer.setLayout(bottomSubContainerLayout);
         bottomSubContainerLayout.setHorizontalGroup(
             bottomSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 905, Short.MAX_VALUE)
+            .addGap(0, 1019, Short.MAX_VALUE)
         );
         bottomSubContainerLayout.setVerticalGroup(
             bottomSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -532,7 +533,7 @@ public class Karel extends javax.swing.JFrame
                     .addGroup(manualPanelLayout.createSequentialGroup()
                         .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Slowdown, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Speedup, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
@@ -568,7 +569,7 @@ public class Karel extends javax.swing.JFrame
         world.setLayout(worldLayout);
         worldLayout.setHorizontalGroup(
             worldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 588, Short.MAX_VALUE)
+            .addGap(0, 624, Short.MAX_VALUE)
         );
         worldLayout.setVerticalGroup(
             worldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -610,6 +611,14 @@ public class Karel extends javax.swing.JFrame
             }
         });
         jMenu3.add(jMenuItem6);
+
+        jMenuItem8.setText("Link to the Past");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem8);
 
         jMenuItem5.setText("MegaMan");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
@@ -749,8 +758,8 @@ public class Karel extends javax.swing.JFrame
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         programmerThread.stop();
-        buttonPanel.setVisible(true);
-        manualPanel.setVisible(false);
+//        buttonPanel.setVisible(true);
+//        manualPanel.setVisible(false);
         world.worldDeleter();
         world.initWorld();
 
@@ -767,7 +776,7 @@ public class Karel extends javax.swing.JFrame
             programmerThread.suspend();
             switcher.setText("Resume");
             try {
-             Image img = ImageIO.read(getClass().getResource("play.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/play.png"));
              switcher.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         }
@@ -776,7 +785,7 @@ public class Karel extends javax.swing.JFrame
             programmerThread.resume();
             switcher.setText("Pause");
             try {
-             Image img = ImageIO.read(getClass().getResource("pause.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/pause.png"));
              switcher.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         }
@@ -859,6 +868,12 @@ public class Karel extends javax.swing.JFrame
         buttonPanel.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        //Link to the Past Theme
+        world.setThemes("LTTP");
+        this.repaint();
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
     private void programmerRunButton(java.awt.event.ActionEvent evt)
     {
         programmerFrame.setVisible(false);
@@ -869,7 +884,7 @@ public class Karel extends javax.swing.JFrame
         speedCounter.setText("Speed:        " + currSpeed);
         Pause.setText("Pause");
         try {
-         Image img = ImageIO.read(getClass().getResource("pause.png"));
+         Image img = ImageIO.read(getClass().getResource("/karel/guipics/pause.png"));
          Pause.setIcon(new ImageIcon(img));
         } catch (IOException ex) {}
         programmerThread.stop();
@@ -881,7 +896,7 @@ public class Karel extends javax.swing.JFrame
                   world.doScript(0, 0, user_input); // Running
                   buttonPanel.setVisible(false);
                   manualPanel.setVisible(false);
-                  programmerFrame.setVisible(false);
+                  programmerFrame.setVisible(true);
              }
          };
          programmerThread = new Thread(r1);
@@ -1050,6 +1065,7 @@ public class Karel extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel leftContainer;
     private javax.swing.JPanel mainContainer;
     private javax.swing.JPanel manualPanel;
