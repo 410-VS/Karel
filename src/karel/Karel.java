@@ -336,7 +336,7 @@ public class Karel extends javax.swing.JFrame
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 607, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 611, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(StepCount)
@@ -369,7 +369,7 @@ public class Karel extends javax.swing.JFrame
         bottomSubContainer.setLayout(bottomSubContainerLayout);
         bottomSubContainerLayout.setHorizontalGroup(
             bottomSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 905, Short.MAX_VALUE)
+            .addGap(0, 1019, Short.MAX_VALUE)
         );
         bottomSubContainerLayout.setVerticalGroup(
             bottomSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -532,7 +532,7 @@ public class Karel extends javax.swing.JFrame
                     .addGroup(manualPanelLayout.createSequentialGroup()
                         .addComponent(speedCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(manualPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Slowdown, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Speedup, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
@@ -568,7 +568,7 @@ public class Karel extends javax.swing.JFrame
         world.setLayout(worldLayout);
         worldLayout.setHorizontalGroup(
             worldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 588, Short.MAX_VALUE)
+            .addGap(0, 624, Short.MAX_VALUE)
         );
         worldLayout.setVerticalGroup(
             worldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -749,8 +749,8 @@ public class Karel extends javax.swing.JFrame
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         programmerThread.stop();
-        buttonPanel.setVisible(true);
-        manualPanel.setVisible(false);
+//        buttonPanel.setVisible(true);
+//        manualPanel.setVisible(false);
         world.worldDeleter();
         world.initWorld();
 
