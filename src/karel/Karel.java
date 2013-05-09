@@ -927,8 +927,8 @@ public class Karel extends javax.swing.JFrame
         {
              public void run()
              {
-                  world.doScript(0, 0, user_input); // Running
-                  hidePanels(lastPane);
+                 lastPane = manualPanel;
+                 world.doScript(0, 0, user_input); // Running
              }
          };
          programmerThread = new Thread(r1);

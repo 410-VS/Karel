@@ -12,7 +12,7 @@ public class Player extends Entity
     private ArrayList Bag = new ArrayList();
     Gem tempGem;
     private int StepCounter;
-    private String themeName = "Zelda";
+    private String themeName = "LTTP";
     
     public void setNewTheme(String newTheme)
     {
@@ -25,7 +25,7 @@ public class Player extends Entity
         StepCounter = 0;
         direction ='^';
 
-        URL loc = this.getClass().getResource("/karel/themes/ZeldaUp.png");
+        URL loc = this.getClass().getResource("/karel/themes/LTTPUp.png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
