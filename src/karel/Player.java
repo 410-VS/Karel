@@ -81,7 +81,7 @@ public class Player extends Entity
     
     public void ChangeImage(String NewDirection)
     {   
-        URL loc = this.getClass().getResource(themeName+NewDirection +".png");
+        URL loc = this.getClass().getResource("/karel/themes/"+themeName+NewDirection +".png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
