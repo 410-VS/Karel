@@ -27,9 +27,9 @@ public class World extends JPanel
     private int h = 14;
     private home Home;
     private Gem tempGem;
-    JTextArea lines;
-    JTextArea jta;
-    int Speed = 5;
+    private int Speed = 5; // Execution speed for script
+    private String stepThrough = ""; // String for keeping track of execution
+                                    // steps in doScript
     
     //Map
     private String level =
@@ -338,7 +338,7 @@ public class World extends JPanel
           // scope is the level of nested commands
           // user_input is the string array containing the file
             
-            int max_line_count = user_input.size(); // Size of the file
+            int max_line_count = user_input.size(); // Size of the file  
             
             while (line_count < max_line_count) 
             { 
@@ -424,10 +424,14 @@ public class World extends JPanel
                                Thread.currentThread().sleep((3000/Speed) - 290);
                            }
                            catch(Exception e){}; 
+                           stepThrough = "Line: " + (line_count + 1)
+                                       + "      Executing command "
+                                       + current_line + "\n" + stepThrough;
                            boolean error = choiceMade(current_line);
                            if (error)
                            {
                                infoBox("Karel has crashed into a wall!", "ERROR");
+                               stepThrough = "ERROR\n" + stepThrough;
                                return throw_error;                              
                            }
                            break;
@@ -438,11 +442,15 @@ public class World extends JPanel
                                 infoBox("Repeat value not "
                                         + "in valid range (1-999) "
                                         + "on line " + (line_count + 1), "ERROR");
+                                stepThrough = "ERROR\n" + stepThrough;
                                 return throw_error;
                             }
                         
                             for (int i = 0; i < repeat_num; i++)
                             {
+                                stepThrough = "Line: " + (line_count + 1)
+                                            + "     doing Repeat number "
+                                            + (i + 1) + "\n" + stepThrough;
                                 next_line = doScript((line_count + 1), 
                                                     (scope + 1), user_input);
                                 
@@ -463,18 +471,29 @@ public class World extends JPanel
                             { 
                                 infoBox("Expected condition"
                                         + " after If on line " 
-                                        +  (line_count + 1), "ERROR");;
+                                        +  (line_count + 1), "ERROR");
+                                stepThrough = "ERROR\n" + stepThrough;
                                 return throw_error;
                             }                           
                             
+                            stepThrough = "Line: " + (line_count + 1)
+                                       + "      Checking if " + conditional
+                                       + "\n" + stepThrough;
+                            
                             if (handleCondition(conditional))
                             { // Successful If case
+                                stepThrough = "Line: " + (line_count + 1)
+                                       + "      " + conditional + " is true"
+                                       + "\n" + stepThrough;
                                 next_line = doScript((line_count + 1), 
                                                     (scope + 1), user_input);
                             }
                             
                             else
                             { // Successful Else case
+                                stepThrough = "Line: " + (line_count + 1)
+                                       + "      " + conditional + "is NOT true"
+                                       + "\n" + stepThrough;
                                 // Finding the accompanying Else statement
                                 tempstr = "else";
                                 
@@ -537,11 +556,18 @@ public class World extends JPanel
                                 infoBox("Expected condition"
                                         + " on line " 
                                         +  (line_count + 1), "ERROR");
+                                stepThrough = "ERROR\n" + stepThrough;
                                 return throw_error;
                             }
                             int while_line = line_count;
+                            stepThrough = "Line: " + (line_count + 1)
+                                       + "      Checking While"
+                                       + "\n" + stepThrough;
                             while (handleCondition(conditional))
                             {
+                                stepThrough = "Line: " + (line_count + 1)
+                                       + "      " + conditional 
+                                       + " is true in While\n" + stepThrough;
                                 next_line = doScript((while_line + 1), 
                                                      (scope + 1), user_input);                                                               
                                 // If an error was returned in this loop
@@ -551,6 +577,9 @@ public class World extends JPanel
                                 }
                                 line_count = next_line - 1;
                             }
+                            stepThrough = "Line: " + (line_count + 1)
+                                       + "      " + conditional 
+                                       + " is NOT true in While\n" + stepThrough;
                             break;
                              // End "While" case
                         
@@ -558,6 +587,7 @@ public class World extends JPanel
                             infoBox("Unrecognized syntax\n" 
                                     + current_line 
                                     + "\nOn line " + (line_count + 1), "ERROR");
+                            stepThrough = "ERROR\n" + stepThrough;
                             return throw_error;
                 }
                 ++line_count;
@@ -676,6 +706,11 @@ public class World extends JPanel
             karel.repaintNewTheme();
             //the player setnewtheme only happens when the player changes direction..
             //need to reset the image outside of the change direction...
+        }
+        // Function to reset the stepthrough string
+        public void resetStepThrough()
+        {
+            stepThrough = "";
         }
 
 }

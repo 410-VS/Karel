@@ -4,6 +4,7 @@
  */
 package karel;
 
+import java.awt.Container;
 import javax.imageio.ImageIO;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -14,7 +15,6 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,13 +29,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
@@ -52,11 +48,12 @@ public class Karel extends javax.swing.JFrame
 {
     private final int OFFSET = 0;
     
-    JTextArea lines;
-    JTextArea programmerText;
-    JInternalFrame programmerFrame;
-    Thread programmerThread;
-    int currSpeed = 5;
+    private JTextArea lines = new JTextArea();
+    private JTextArea programmerText = new JTextArea();
+    private JInternalFrame programmerFrame = new JInternalFrame();
+    private Thread programmerThread = new Thread();
+    private int currSpeed = 5;
+    private Container lastPane;
     /**
      * Creates new form Karel
      */
@@ -80,6 +77,7 @@ public class Karel extends javax.swing.JFrame
     
     public void InitUI() 
     {
+        // Initializing button images
         try {
              Image img = ImageIO.read(getClass().getResource("/karel/guipics/stop.png"));
              Stop.setIcon(new ImageIcon(img));
@@ -110,9 +108,10 @@ public class Karel extends javax.swing.JFrame
             } catch (IOException ex) {}
         Pause.setText("Pause");
         Pause.setFont(new Font("Arial", Font.PLAIN, 0));
-        buttonPanel.setVisible(true);
-        manualPanel.setVisible(false);
+        
         blankPanel.setVisible(true);
+        lastPane = buttonPanel;
+        hidePanels(lastPane);
         // Creating the popout frame with line numbering
         programmerFrame = new JInternalFrame("Programmer Mode");
         // Building Menu
@@ -717,8 +716,7 @@ public class Karel extends javax.swing.JFrame
         // TODO add your handling code here:
         // get a file path from the user
         programmerThread.stop();
-        buttonPanel.setVisible(true);
-        manualPanel.setVisible(false);
+        hidePanels(lastPane);
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Please Specify the File To Open");
         File fileToOpen;
@@ -758,8 +756,7 @@ public class Karel extends javax.swing.JFrame
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         programmerThread.stop();
-//        buttonPanel.setVisible(true);
-//        manualPanel.setVisible(false);
+        hidePanels(lastPane);
         world.worldDeleter();
         world.initWorld();
 
@@ -813,18 +810,15 @@ public class Karel extends javax.swing.JFrame
         programmerThread.stop();
         world.worldDeleter();
         world.initWorld();
-        buttonPanel.setVisible(false);
-        manualPanel.setVisible(false);
-        programmerFrame.setVisible(true);
+        lastPane = programmerFrame;
+        hidePanels(lastPane);
         //paint
         this.repaint();
     }//GEN-LAST:event_Reset
 
     private void Stop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Stop
         programmerThread.stop();
-        buttonPanel.setVisible(false);
-        manualPanel.setVisible(false);
-        programmerFrame.setVisible(true);
+        hidePanels(lastPane);
     }//GEN-LAST:event_Stop
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -855,17 +849,15 @@ public class Karel extends javax.swing.JFrame
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        buttonPanel.setVisible(false);
-        manualPanel.setVisible(false);
         programmerThread.stop();
-        programmerFrame.setVisible(true);
+        lastPane = programmerFrame;
+        hidePanels(lastPane);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        manualPanel.setVisible(false);
-        programmerFrame.setVisible(false);
         programmerThread.stop();
-        buttonPanel.setVisible(true);
+        lastPane = buttonPanel;
+        hidePanels(lastPane);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
@@ -879,9 +871,11 @@ public class Karel extends javax.swing.JFrame
         programmerFrame.setVisible(false);
         buttonPanel.setVisible(false);
         manualPanel.setVisible(true);
+        // Resetting speed
         currSpeed = 5;
         world.setSpeed(currSpeed);
         speedCounter.setText("Speed:        " + currSpeed);
+        // Resetting the pause button
         Pause.setText("Pause");
         try {
          Image img = ImageIO.read(getClass().getResource("/karel/guipics/pause.png"));
@@ -894,9 +888,7 @@ public class Karel extends javax.swing.JFrame
              public void run()
              {
                   world.doScript(0, 0, user_input); // Running
-                  buttonPanel.setVisible(false);
-                  manualPanel.setVisible(false);
-                  programmerFrame.setVisible(true);
+                  hidePanels(lastPane);
              }
          };
          programmerThread = new Thread(r1);
@@ -988,6 +980,16 @@ public class Karel extends javax.swing.JFrame
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
             } 
+    }
+    
+    // Function to close all panels except the last one opened
+    // Should always be called after an action, to ensure good output
+    private void hidePanels(Container lastOpen)
+    {
+        buttonPanel.setVisible(false);
+        manualPanel.setVisible(false);
+        programmerFrame.setVisible(false);
+        lastOpen.setVisible(true);
     }
     /**
      * @param args the command line arguments
