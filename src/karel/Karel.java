@@ -806,7 +806,7 @@ public class Karel extends javax.swing.JFrame
             programmerThread.suspend();
             switcher.setText("Resume");
             try {
-             Image img = ImageIO.read(getClass().getResource("play.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/play.png"));
              switcher.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         }
@@ -815,7 +815,7 @@ public class Karel extends javax.swing.JFrame
             programmerThread.resume();
             switcher.setText("Pause");
             try {
-             Image img = ImageIO.read(getClass().getResource("pause.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/pause.png"));
              switcher.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         }
@@ -908,7 +908,7 @@ public class Karel extends javax.swing.JFrame
         speedCounter.setText("Speed:        " + currSpeed);
         Pause.setText("Pause");
         try {
-         Image img = ImageIO.read(getClass().getResource("karel/guipics/pause.png"));
+         Image img = ImageIO.read(getClass().getResource("/karel/guipics/pause.png"));
          Pause.setIcon(new ImageIcon(img));
         } catch (IOException ex) {}
         programmerThread.stop();
@@ -920,7 +920,7 @@ public class Karel extends javax.swing.JFrame
                   world.doScript(0, 0, user_input); // Running
                   buttonPanel.setVisible(false);
                   manualPanel.setVisible(false);
-                  programmerFrame.setVisible(false);
+                  programmerFrame.setVisible(true);
              }
          };
          programmerThread = new Thread(r1);
