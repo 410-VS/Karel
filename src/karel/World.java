@@ -336,29 +336,36 @@ public class World extends JPanel
         return false; // no error
     }              
             
-        public int doScript(int line_count, int scope, List<String> user_input)
+        public int doScript(int lineCount, int scope, List<String> userInput)
         { // Runs a user defined list of commands. Used recursively.
-          // line_count is how far into the file we are
+          // lineCount is how far into the file we are
           // scope is the level of nested commands
-          // user_input is the string array containing the file
+          // userInput is the string array containing the file
             
-            int max_line_count = user_input.size(); // Size of the file  
+            int maxLineCount = userInput.size(); // Size of the file  
             
-            while (line_count < max_line_count) 
+            while (lineCount < maxLineCount) 
             { 
-                String current_line = user_input.get(line_count); // Gets the line we're
+                String currentLine = userInput.get(lineCount); // Gets the line we're
                                                                  // dealing with
                 String tempstr = new String(); // Used for swapping strings
                 String conditional = new String(); // Holds the condition
                                                    // to be checked.
-                int repeat_num = 0; //The number of times to repeat. Initialized
+                int repeatNum = 0; //The number of times to repeat. Initialized
                                     //to a valid value for error checking
-                int next_line = 0; //Keeps the next line when dealing with scope
-                final int throw_error = max_line_count + 1; // Error return value
+                int nextLine = 0; //Keeps the next line when dealing with scope
+                int commentIndex = currentLine.indexOf('#'); // Finding comments
+                final int throwError = maxLineCount + 1; // Error return value
                 
-                if (current_line.isEmpty())
+                // If the comment symbol is in the string
+                if (commentIndex != -1)
                 {
-                    line_count++;
+                    currentLine = currentLine.substring(0, commentIndex);
+                }
+                
+                if (currentLine.isEmpty())
+                {
+                    lineCount++;
                     continue;
                 }
                 
@@ -368,56 +375,56 @@ public class World extends JPanel
                     int i;
                     for (i = 0; i < scope; i++)
                     {
-                        if (!(current_line.startsWith("\t")))
+                        if (!(currentLine.startsWith("\t")))
                         {
-                            return line_count; // Returning due to out of scope
+                            return lineCount; // Returning due to out of scope
                         }
                         
                         else
                         {
-                            current_line = current_line.substring(1); // Removing the tab
+                            currentLine = currentLine.substring(1); // Removing the tab
                         }
                     }                    
                 }
                 // if the current line is out of scope
-                if (current_line.startsWith("\t"))
+                if (currentLine.startsWith("\t"))
                 {
-                    ++line_count;
+                    ++lineCount;
                     continue;
                 }
-                current_line = current_line.trim();
+                currentLine = currentLine.trim();
                 
                 /* Parsing the current line for recognizable Syntax */
-                if (current_line.matches("^repeat [0-9]{1,}$"))
+                if (currentLine.matches("^repeat [0-9]{1,}$"))
                 {
-                    tempstr = current_line.substring(7); // Grabbing the number
-                    repeat_num = Integer.valueOf(tempstr);
-                    tempstr = current_line.substring(0, 6); // Grabbing the repeat
-                    current_line = tempstr;
+                    tempstr = currentLine.substring(7); // Grabbing the number
+                    repeatNum = Integer.valueOf(tempstr);
+                    tempstr = currentLine.substring(0, 6); // Grabbing the repeat
+                    currentLine = tempstr;
                 }
                 
-                if(current_line.matches("^if (not )?(gem|home|wall)$"))
+                if(currentLine.matches("^if (not )?(gem|home|wall)$"))
                 {
-                    conditional = current_line.substring(3); // Grabbing condition
-                    tempstr = current_line.substring(0, 2); // Grabbing if
-                    current_line = tempstr;
+                    conditional = currentLine.substring(3); // Grabbing condition
+                    tempstr = currentLine.substring(0, 2); // Grabbing if
+                    currentLine = tempstr;
                 }
                 
-                if (current_line.matches("^while (not )?(gem|home|wall)$"))
+                if (currentLine.matches("^while (not )?(gem|home|wall)$"))
                 {
-                    conditional = current_line.substring(6); // Grabbing condition
-                    tempstr = current_line.substring(0, 5); // Grabbing while
-                    current_line = tempstr;
+                    conditional = currentLine.substring(6); // Grabbing condition
+                    tempstr = currentLine.substring(0, 5); // Grabbing while
+                    currentLine = tempstr;
                 }
                 /* End Parsing */                
-                switch (current_line)
+                switch (currentLine)
                 { // Controls the logic for each valid command
                   // If input is something unexpected, it halts execution and
                   // prints an appropriate error
-                  // Any time an error is encountered, max_line_count + 1 is
+                  // Any time an error is encountered, maxLineCount + 1 is
                   // returned, signaling to end execution
-                  // Note: Since line_count is post-incremented, all uses of
-                  // next_line are reduced by 1 to account for the post increment
+                  // Note: Since lineCount is post-incremented, all uses of
+                  // nextLine are reduced by 1 to account for the post increment
                     case "left" :                       
                     case "right":                        
                     case "go"   : 
@@ -429,45 +436,45 @@ public class World extends JPanel
                            }
                            catch(Exception e){}; 
                            stepThrough = stepThrough + "Line: " 
-                                       + (line_count + 1)
+                                       + (lineCount + 1)
                                        + "      Executing command "
-                                       + current_line + "\n";
-                           boolean error = choiceMade(current_line);
+                                       + currentLine + "\n";
+                           boolean error = choiceMade(currentLine);
                            if (error)
                            {
                                infoBox("Karel has crashed into a wall!", "ERROR");
                                stepThrough = stepThrough + "ERROR\n";
-                               return throw_error;                              
+                               return throwError;                              
                            }
                            break;
                     case "repeat":  
                             // Checking if the repeat integer is out of range 
-                            if ((repeat_num < 1) || (repeat_num > 999))
+                            if ((repeatNum < 1) || (repeatNum > 999))
                             { 
                                 infoBox("Repeat value not "
                                         + "in valid range (1-999) "
-                                        + "on line " + (line_count + 1), "ERROR");
+                                        + "on line " + (lineCount + 1), "ERROR");
                                 stepThrough = stepThrough + "ERROR\n";
-                                return throw_error;
+                                return throwError;
                             }
                         
-                            for (int i = 0; i < repeat_num; i++)
+                            for (int i = 0; i < repeatNum; i++)
                             {
                                 stepThrough = stepThrough + "Line: " 
-                                            + (line_count + 1)
+                                            + (lineCount + 1)
                                             + "      Repeat number "
                                             + (i + 1) + "\n";
-                                next_line = doScript((line_count + 1), 
-                                                    (scope + 1), user_input);
+                                nextLine = doScript((lineCount + 1), 
+                                                    (scope + 1), userInput);
                                 
                                 // If an error was returned
-                                if (next_line > max_line_count)
+                                if (nextLine > maxLineCount)
                                 { 
-                                    return throw_error;
+                                    return throwError;
                                 }
                                 
                             }
-                            line_count = next_line - 1;
+                            lineCount = nextLine - 1;
                             break; 
                             // End "Repeat" case
                         
@@ -477,24 +484,24 @@ public class World extends JPanel
                             { 
                                 infoBox("Expected condition"
                                         + " after If on line " 
-                                        +  (line_count + 1), "ERROR");
+                                        +  (lineCount + 1), "ERROR");
                                 stepThrough = stepThrough + "ERROR\n";
-                                return throw_error;
+                                return throwError;
                             }                           
                             
                             if (handleCondition(conditional))
                             { // Successful If case
                                 stepThrough = stepThrough + "Line: "
-                                            + (line_count + 1) + "      If " 
+                                            + (lineCount + 1) + "      If " 
                                             + conditional + " is true\n";
-                                next_line = doScript((line_count + 1), 
-                                                    (scope + 1), user_input);
+                                nextLine = doScript((lineCount + 1), 
+                                                    (scope + 1), userInput);
                             }
                             
                             else
                             { // Successful Else case
                                 stepThrough = stepThrough + "Line: " 
-                                            + (line_count + 1)
+                                            + (lineCount + 1)
                                             + "      If " + conditional 
                                             + " is false\n";
                                 // Finding the accompanying Else statement
@@ -505,31 +512,31 @@ public class World extends JPanel
                                 {
                                     tempstr = "\t" + tempstr;
                                 }
-                                int else_line = line_count + 1;//Line the Else is on
+                                int else_line = lineCount + 1;//Line the Else is on
                                 
                                 // While the next line isn't our Else
-                                while (! (user_input.get(else_line).matches(tempstr)))
+                                while (! (userInput.get(else_line).matches(tempstr)))
                                 {
                                     else_line++;
                                     
                                     // If we can't find an accompanying Else
-                                    if (else_line >= max_line_count)
+                                    if (else_line >= maxLineCount)
                                     {
                                         break;
                                     }
                                 }
-                                if (else_line >= max_line_count)
+                                if (else_line >= maxLineCount)
                                 {
-                                    ++line_count;
+                                    ++lineCount;
                                     continue;
                                 }
                                 // End check for accompanying Else
                                
-                                next_line = doScript((else_line + 1), 
-                                                    (scope + 1), user_input);
+                                nextLine = doScript((else_line + 1), 
+                                                    (scope + 1), userInput);
                              }
                             
-                            line_count = next_line - 1;
+                            lineCount = nextLine - 1;
                             break;
                     
                     case "else" : // Only falls in this after a successful 'If'   
@@ -540,15 +547,15 @@ public class World extends JPanel
                             // As long as the line exceeds our scope
                             do
                             {
-                                ++line_count;
+                                ++lineCount;
                                 
                                 // If we've reached the end of the file
-                                if (line_count >= max_line_count)
+                                if (lineCount >= maxLineCount)
                                 { 
-                                    return line_count;
+                                    return lineCount;
                                 }
-                             } while (user_input.get(line_count).startsWith(tempstr, scope));
-                             line_count -= 1;
+                             } while (userInput.get(lineCount).startsWith(tempstr, scope));
+                             lineCount -= 1;
                             break;
                             // End "If-Else" case
                         
@@ -558,25 +565,25 @@ public class World extends JPanel
                             { 
                                 infoBox("Expected condition"
                                         + " on line " 
-                                        +  (line_count + 1), "ERROR");
+                                        +  (lineCount + 1), "ERROR");
                                 stepThrough = stepThrough + "ERROR\n";
-                                return throw_error;
+                                return throwError;
                             }
-                            int while_line = line_count;
+                            int while_line = lineCount;
                             while (handleCondition(conditional))
                             {
                                 stepThrough = stepThrough + "Line: " 
                                             + (while_line + 1)
                                             + "      While " + conditional
                                             + " is true in While\n" ;
-                                next_line = doScript((while_line + 1), 
-                                                     (scope + 1), user_input);                                                               
+                                nextLine = doScript((while_line + 1), 
+                                                     (scope + 1), userInput);                                                               
                                 // If an error was returned in this loop
-                                if (next_line > max_line_count)
+                                if (nextLine > maxLineCount)
                                 {
-                                    return throw_error;
+                                    return throwError;
                                 }
-                                line_count = next_line - 1;
+                                lineCount = nextLine - 1;
                             }
                             stepThrough = stepThrough + "Line: " 
                                         + (while_line + 1)
@@ -587,14 +594,18 @@ public class World extends JPanel
                         
                     default: 
                             infoBox("Unrecognized syntax\n" 
-                                    + current_line 
-                                    + "\nOn line " + (line_count + 1), "ERROR");
+                                    + currentLine 
+                                    + "\nOn line " + (lineCount + 1), "ERROR");
                             stepThrough = stepThrough + "ERROR\n";
-                            return throw_error;
+                            return throwError;
                 }
-                ++line_count;
+                ++lineCount;
             }
-            return line_count;
+            if (scope == 0)
+            {
+                stepThrough = stepThrough + "Script Complete!";
+            }
+            return lineCount;
         }
         
         // Function to check if a conditional is true or false
@@ -738,15 +749,6 @@ public class World extends JPanel
                     clip.start();
             }
             
-            catch(UnsupportedAudioFileException uae) {
-            infoBox("IOException", "stuff");
-            }
-            catch(IOException ioe) {
-                infoBox("IOException", "stuff");
-            }
-            catch(LineUnavailableException lua) {
-                infoBox("IOException", "stuff");
-            }
+            catch(Exception e) {};
         }
-
 }

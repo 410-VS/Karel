@@ -382,7 +382,7 @@ public class Karel extends javax.swing.JFrame
         );
         bottomSubContainerLayout.setVerticalGroup(
             bottomSubContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 33, Short.MAX_VALUE)
+            .addGap(0, 36, Short.MAX_VALUE)
         );
 
         mainContainer.add(bottomSubContainer, java.awt.BorderLayout.PAGE_END);
@@ -468,7 +468,7 @@ public class Karel extends javax.swing.JFrame
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8)
                     .addComponent(jButton9))
-                .addContainerGap(186, Short.MAX_VALUE))
+                .addContainerGap(216, Short.MAX_VALUE))
         );
 
         leftContainer.add(buttonPanel, "card2");
@@ -567,8 +567,8 @@ public class Karel extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(logClear)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logPane, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
+                .addComponent(logPane, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43))
         );
 
         logClear.getAccessibleContext().setAccessibleName("logClear");
@@ -583,7 +583,7 @@ public class Karel extends javax.swing.JFrame
         );
         blankPanelLayout.setVerticalGroup(
             blankPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 434, Short.MAX_VALUE)
+            .addGap(0, 464, Short.MAX_VALUE)
         );
 
         leftContainer.add(blankPanel, "card4");
@@ -605,7 +605,7 @@ public class Karel extends javax.swing.JFrame
         );
         worldLayout.setVerticalGroup(
             worldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 434, Short.MAX_VALUE)
+            .addGap(0, 464, Short.MAX_VALUE)
         );
 
         rightContainer.add(world);
@@ -700,7 +700,7 @@ public class Karel extends javax.swing.JFrame
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
         );
 
         pack();
@@ -905,9 +905,7 @@ public class Karel extends javax.swing.JFrame
 
     private void programmerRunButton(java.awt.event.ActionEvent evt)
     {
-        programmerFrame.setVisible(false);
-        buttonPanel.setVisible(false);
-        manualPanel.setVisible(true);
+        hidePanels(manualPanel);
         // Resetting step log
         world.resetStepThrough();
         // Resetting speed
@@ -921,12 +919,12 @@ public class Karel extends javax.swing.JFrame
          Pause.setIcon(new ImageIcon(img));
         } catch (IOException ex) {}
         programmerThread.stop();
-        final List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));                       
+        final List<String> userInput = Arrays.asList(programmerText.getText().split("\n"));                       
         Runnable r1 = new Runnable()
         {
              public void run()
              {
-                 world.doScript(0, 0, user_input); // Running
+                 world.doScript(0, 0, userInput); // Running
              }
          };
          programmerThread = new Thread(r1);
@@ -936,7 +934,7 @@ public class Karel extends javax.swing.JFrame
     {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Please Enter File Name and Choose Location");
-        List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));
+        List<String> userInput = Arrays.asList(programmerText.getText().split("\n"));
         PrintWriter out = null;                      
 
         int userSelection = fileChooser.showSaveDialog(fileChooser);
@@ -947,9 +945,9 @@ public class Karel extends javax.swing.JFrame
                  File fileToSave = fileChooser.getSelectedFile();
 
                  out = new PrintWriter(fileToSave.getAbsolutePath()+".txt");
-                 for(int loop = 0; loop < user_input.size(); loop++)
+                 for(int loop = 0; loop < userInput.size(); loop++)
                  {
-                    out.println(user_input.get(loop));                                
+                    out.println(userInput.get(loop));                                
                  }
 
             out.close();
@@ -996,7 +994,7 @@ public class Karel extends javax.swing.JFrame
     {
         try 
             {
-                 List<String> user_input = Arrays.asList(programmerText.getText().split("\n"));
+                 List<String> userInput = Arrays.asList(programmerText.getText().split("\n"));
                  PrintWriter out;
                  DateFormat dateFormat = new SimpleDateFormat("dd_MMM_HH_mm_ss");
                  Date date = new Date();
@@ -1009,9 +1007,9 @@ public class Karel extends javax.swing.JFrame
 
                  out = new PrintWriter(fileName1);
 
-                 for(int loop = 0; loop < user_input.size(); loop++)
+                 for(int loop = 0; loop < userInput.size(); loop++)
                  {
-                    out.println(user_input.get(loop));                                
+                    out.println(userInput.get(loop));                                
                  }
 
                  out.close();
