@@ -103,7 +103,17 @@ public class Player extends Entity
         URL loc = this.getClass().getResource("/karel/themes/" +themeName+directionString +".png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
-        this.setImage(image);
-        
+        this.setImage(image);   
     }
+    
+    public void updateGemsInBag(String newTheme)
+    {
+        for(int loop = 0; loop<Bag.size(); loop++)
+        {
+            Gem temp = (Gem) Bag.get(loop);
+            temp.setNewImage(newTheme+"Gem.png");
+        }
+    }
+            
+    
 }
