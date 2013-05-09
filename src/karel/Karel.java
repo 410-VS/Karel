@@ -908,7 +908,7 @@ public class Karel extends javax.swing.JFrame
         speedCounter.setText("Speed:        " + currSpeed);
         Pause.setText("Pause");
         try {
-         Image img = ImageIO.read(getClass().getResource("karel/guipics/pause.png"));
+         Image img = ImageIO.read(getClass().getResource("/karel/guipics/pause.png"));
          Pause.setIcon(new ImageIcon(img));
         } catch (IOException ex) {}
         programmerThread.stop();
