@@ -806,7 +806,7 @@ public class Karel extends javax.swing.JFrame
             programmerThread.suspend();
             switcher.setText("Resume");
             try {
-             Image img = ImageIO.read(getClass().getResource("play.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/play.png"));
              switcher.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         }
@@ -815,7 +815,7 @@ public class Karel extends javax.swing.JFrame
             programmerThread.resume();
             switcher.setText("Pause");
             try {
-             Image img = ImageIO.read(getClass().getResource("pause.png"));
+             Image img = ImageIO.read(getClass().getResource("/karel/guipics/pause.png"));
              switcher.setIcon(new ImageIcon(img));
             } catch (IOException ex) {}
         }
