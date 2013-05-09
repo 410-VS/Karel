@@ -920,7 +920,7 @@ public class Karel extends javax.swing.JFrame
                   world.doScript(0, 0, user_input); // Running
                   buttonPanel.setVisible(false);
                   manualPanel.setVisible(false);
-                  programmerFrame.setVisible(false);
+                  programmerFrame.setVisible(true);
              }
          };
          programmerThread = new Thread(r1);
