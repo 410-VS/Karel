@@ -343,7 +343,7 @@ public class World extends JPanel
           // userInput is the string array containing the file
             
             int maxLineCount = userInput.size(); // Size of the file  
-            
+    
             while (lineCount < maxLineCount) 
             { 
                 String currentLine = userInput.get(lineCount); // Gets the line we're
@@ -363,7 +363,7 @@ public class World extends JPanel
                     currentLine = currentLine.substring(0, commentIndex);
                 }
                 
-                if (currentLine.isEmpty())
+                if (currentLine.trim().isEmpty())
                 {
                     lineCount++;
                     continue;
